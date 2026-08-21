@@ -641,22 +641,22 @@ export default function MenuManagement() {
                 </div>
                 <div className="flex items-end gap-1.5 shrink-0">
                   <button 
-                    type="submit" 
-                    disabled={submitting}
-                    className="bg-[white] disabled:bg-[white] text-white p-2 rounded-lg hover:bg-[white] cursor-pointer"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                  <button 
                     type="button" 
                     disabled={submitting}
                     onClick={handleCancelCategoryEdit} 
-                    className="bg-[white] text-[#141B20] p-2 rounded-lg hover:bg-[white] cursor-pointer"
+                    className="bg-[white] text-[#141B20] p-2 rounded-lg hover:bg-gray-100 cursor-pointer flex items-center justify-center border border-transparent"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-[#141B20] hover:bg-[#141B20]/90 text-[white] font-bold py-2 rounded-lg text-xs mt-2 transition-colors disabled:opacity-50"
+              >
+                {submitting ? 'Saving...' : (editingCategory ? 'Update Category' : 'Add Category')}
+              </button>
             </form>
           )}
 
