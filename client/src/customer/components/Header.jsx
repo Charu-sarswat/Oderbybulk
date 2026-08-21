@@ -32,7 +32,7 @@ export default function Header() {
 
   if (isMenuPage) {
     return (
-      <header className="sticky top-0 z-40 bg-white text-[#141B20] border-b border-[#141B20]/10 font-sans">
+      <header className="sticky top-0 z-40 bg-black text-white border-b border-white/10 font-sans">
         <div className="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center justify-between gap-3">
           
           <Link to={tableId ? `/table/${tableId}` : "/"} className="flex items-center gap-3">
@@ -42,7 +42,7 @@ export default function Header() {
               className="h-8 sm:h-11 w-auto object-contain"
             />
             {tableInfo && (
-              <span className="hidden xs:inline-flex items-center bg-[#141B20]/5 border border-[#141B20]/20 text-[#141B20] text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <span className="hidden xs:inline-flex items-center bg-white/10 border border-white/20 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
                 Table {tableInfo.table_number}
               </span>
             )}
@@ -66,7 +66,7 @@ export default function Header() {
             >
               <ShoppingCart className="w-5 h-5" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-[#141B20] text-white text-[10px] font-black w-5.5 h-5.5 rounded-full flex items-center justify-center border-2 border-white">
+                <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-[10px] font-black w-5.5 h-5.5 rounded-full flex items-center justify-center border-2 border-black">
                   {cartItemCount}
                 </span>
               )}
@@ -75,7 +75,7 @@ export default function Header() {
             {/* Profile / Log In */}
             {customerUser ? (
               <div className="flex items-center gap-1">
-                <Link to="/account" className="hidden sm:flex items-center gap-1 bg-white hover:bg-gray-50 px-3 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
+                <Link to="/account" className="hidden sm:flex items-center gap-1 bg-gray-900 hover:bg-gray-800 border border-white/10 px-3 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
                   <UserCircle className="w-4 h-4 text-[#A97E16]" />
                   <span>{customerUser.name.split(' ')[0]}</span>
                 </Link>
@@ -88,7 +88,7 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <Link to="/account" className="flex items-center gap-1 bg-white hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
+              <Link to="/account" className="flex items-center gap-1 bg-gray-900 hover:bg-gray-800 border border-white/10 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
                 <UserCircle className="w-4 h-4 text-[#A97E16]" />
                 <span className="hidden sm:inline">Sign In</span>
               </Link>
@@ -130,7 +130,7 @@ export default function Header() {
 
   const isLanding = pathname === '/' || (pathname.startsWith('/table/') && !pathname.includes('/menu'));
   return (
-    <header className={`${isLanding ? 'fixed' : 'sticky'} top-0 left-0 right-0 z-40 px-4 py-2 sm:px-6 sm:py-3.5 bg-white/95 backdrop-blur-xl border-b border-[#141B20]/10 font-sans`}>
+    <header className={`${isLanding ? 'fixed' : 'sticky'} top-0 left-0 right-0 z-40 px-4 py-2 sm:px-6 sm:py-3.5 bg-black/95 backdrop-blur-xl border-b border-white/10 font-sans`}>
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         
         {/* Brand Logo Banner */}
@@ -144,7 +144,7 @@ export default function Header() {
 
         {/* Center Navigation Links (Only shown on Landing page) */}
         {!isMenuPage && pathname === '/' && (
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm lg:text-base font-bold text-[#141B20]/80">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm lg:text-base font-bold text-gray-300">
             <a href="#hero" className="hover:text-[#A97E16] transition-colors">Home</a>
             <a href="#products" className="hover:text-[#A97E16] transition-colors">Bestsellers</a>
             <a href="#reels" className="hover:text-[#A97E16] transition-colors">Insta Reels</a>

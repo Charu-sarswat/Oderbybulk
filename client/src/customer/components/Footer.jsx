@@ -17,7 +17,7 @@ export default function Footer({ onOpenCatering }) {
   };
 
   return (
-    <footer className="bg-white text-[#141B20] border-t border-[#141B20]/10 relative overflow-hidden font-sans">
+    <footer className="bg-black text-white border-t border-white/10 relative overflow-hidden font-sans">
       {/* Top Gold Border Highlight */}
       <div className="h-1 w-full bg-gradient-to-r from-[#A97E16]/20 via-[#A97E16] to-[#A97E16]/20" />
 
@@ -35,13 +35,13 @@ export default function Footer({ onOpenCatering }) {
               />
             </Link>
             
-            <p className="text-[#141B20]/80 text-xs leading-relaxed max-w-sm font-light">
+            <p className="text-gray-300 text-xs leading-relaxed max-w-sm font-light">
               {restaurantData.description}
             </p>
 
             {/* 100% Pure Veg Badge */}
-            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-600">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <div className="inline-flex items-center gap-2 bg-emerald-950/40 border border-emerald-900/50 px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-400">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>100% Pure Vegetarian Guarantee</span>
             </div>
 
@@ -126,10 +126,10 @@ export default function Footer({ onOpenCatering }) {
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4">
-            <h4 className="font-serif font-black text-sm text-[#141B20] uppercase tracking-widest border-b border-[#141B20]/10 pb-2">
+            <h4 className="font-serif font-black text-sm text-white uppercase tracking-widest border-b border-white/10 pb-2">
               Quick Navigation
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#141B20]/80">
+            <ul className="space-y-2.5 text-xs text-gray-300">
               {restaurantData.footerSections.quickLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.path.startsWith('/#') ? (
@@ -151,10 +151,10 @@ export default function Footer({ onOpenCatering }) {
 
           {/* Column 3: Our Services */}
           <div className="space-y-4">
-            <h4 className="font-serif font-black text-sm text-[#141B20] uppercase tracking-widest border-b border-[#141B20]/10 pb-2">
+            <h4 className="font-serif font-black text-sm text-white uppercase tracking-widest border-b border-white/10 pb-2">
               Our Services
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#141B20]/80">
+            <ul className="space-y-2.5 text-xs text-gray-300">
               {restaurantData.footerSections.topSpecialties.map((item, idx) => (
                 <li key={idx}>
                   <Link to={item.path} className="hover:text-[#A97E16] transition-colors flex items-center gap-1.5">
@@ -167,10 +167,10 @@ export default function Footer({ onOpenCatering }) {
 
           {/* Column 4: Contact & Operating Hours */}
           <div className="space-y-4">
-            <h4 className="font-serif font-black text-sm text-[#141B20] uppercase tracking-widest border-b border-[#141B20]/10 pb-2">
+            <h4 className="font-serif font-black text-sm text-white uppercase tracking-widest border-b border-white/10 pb-2">
               Store Location
             </h4>
-            <div className="space-y-3 text-xs text-[#141B20]/80">
+            <div className="space-y-3 text-xs text-gray-300">
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#A97E16] shrink-0 mt-0.5" />
                 <a 
@@ -213,19 +213,19 @@ export default function Footer({ onOpenCatering }) {
       </div>
 
       {/* Bottom Bar */}
-      <div className="bg-gray-50 border-t border-[#141B20]/10 py-6 px-4 text-center text-xs text-[#141B20]/70">
+      <div className="bg-black border-t border-white/10 py-6 px-4 text-center text-xs text-gray-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <div className="text-[11px] text-[#141B20]/80">
+          <div className="text-[11px] text-gray-400">
             &copy; {new Date().getFullYear()} {restaurantData.footerText}
           </div>
 
-          <div className="text-[11px] text-[#141B20]/60">
+          <div className="text-[11px] text-gray-500">
             Maintained &amp; Developed by{' '}
             <a 
               href={restaurantData.developerUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-[#141B20] hover:text-[#A97E16] hover:underline font-bold transition-colors"
+              className="text-white hover:text-[#A97E16] hover:underline font-bold transition-colors"
             >
               {restaurantData.developerCompany}
             </a>
