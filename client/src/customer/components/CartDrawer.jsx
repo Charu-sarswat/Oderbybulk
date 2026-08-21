@@ -584,75 +584,79 @@ export default function CartDrawer({
                 <hr className="border-[#141B20]/60" />
 
                 {/* Order Channel Selector */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-extrabold text-[#691F1A] uppercase tracking-widest block">
-                      Order Channel & Dining Type
-                    </label>
-                    {!isDeliveryEnabled && (
-                      <span className="text-[9px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
-                        🛵 Delivery Paused
-                      </span>
-                    )}
-                  </div>
-                  <select
-                    value={orderChannel}
-                    onChange={(e) => setOrderChannel(e.target.value)}
-                    className="w-full text-xs p-2.5 border border-[#141B20] rounded-xl bg-[white] text-[#141B20] focus:outline-none focus:border-[#691F1A]"
-                  >
-                    <option value="dine_in">🍽️ Dine-In</option>
-                    <option value="takeaway">🛍️ Takeaway (Self Pickup)</option>
-                    {isDeliveryEnabled ? (
-                      <option value="delivery">🛵 Home Delivery</option>
-                    ) : (
-                      <option value="delivery" disabled>🛵 Home Delivery (Currently Unavailable)</option>
-                    )}
-                  </select>
-
-                  {!isDeliveryEnabled && (
-                    <div className="p-2.5 bg-amber-50/80 border border-amber-200/80 rounded-xl text-[10px] text-amber-900 font-medium">
-                      ℹ️ {deliveryDisabledNotice || 'Home Delivery is temporarily paused. Please choose Takeaway (Self Pickup) or Dine-In!'}
-                    </div>
-                  )}
-
-                  {orderChannel === 'delivery' && (
-                    <div className="pt-1 animate-fade-in space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[9px] text-[#141B20] uppercase font-bold tracking-wider block">Delivery Address *</span>
-                        <button
-                          type="button"
-                          onClick={handleDetectLocation}
-                          disabled={detectingLocation}
-                          className="text-[9px] font-black text-[#691F1A] hover:underline flex items-center gap-1 cursor-pointer disabled:opacity-50"
-                        >
-                          {detectingLocation ? (
-                            <>
-                              <RefreshCw className="w-2.5 h-2.5 animate-spin" />
-                              <span>Detecting...</span>
-                            </>
-                          ) : (
-                            <>
-                              <span>📍 Detect Location</span>
-                            </>
-                          )}
-                        </button>
+                {(!cartService || cartService === 'FOOD') && (
+                  <>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-extrabold text-[#691F1A] uppercase tracking-widest block">
+                          Order Channel & Dining Type
+                        </label>
+                        {!isDeliveryEnabled && (
+                          <span className="text-[9px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
+                            🛵 Delivery Paused
+                          </span>
+                        )}
                       </div>
-                      <textarea
-                        required
-                        value={deliveryAddress}
-                        onChange={(e) => {
-                          setDeliveryAddress(e.target.value);
-                          setCoordinates(null);
-                        }}
-                        placeholder="Enter complete address for delivery..."
-                        rows="2"
-                        className="w-full text-xs p-2.5 border border-[#141B20] rounded-xl bg-[#FFF9EE] text-[#141B20] focus:outline-none focus:border-[#691F1A] resize-none font-semibold placeholder:font-normal"
-                      />
-                    </div>
-                  )}
-                </div>
+                      <select
+                        value={orderChannel}
+                        onChange={(e) => setOrderChannel(e.target.value)}
+                        className="w-full text-xs p-2.5 border border-[#141B20] rounded-xl bg-[white] text-[#141B20] focus:outline-none focus:border-[#691F1A]"
+                      >
+                        <option value="dine_in">🍽️ Dine-In</option>
+                        <option value="takeaway">🛍️ Takeaway (Self Pickup)</option>
+                        {isDeliveryEnabled ? (
+                          <option value="delivery">🛵 Home Delivery</option>
+                        ) : (
+                          <option value="delivery" disabled>🛵 Home Delivery (Currently Unavailable)</option>
+                        )}
+                      </select>
 
-                <hr className="border-[#141B20]/60" />
+                      {!isDeliveryEnabled && (
+                        <div className="p-2.5 bg-amber-50/80 border border-amber-200/80 rounded-xl text-[10px] text-amber-900 font-medium">
+                          ℹ️ {deliveryDisabledNotice || 'Home Delivery is temporarily paused. Please choose Takeaway (Self Pickup) or Dine-In!'}
+                        </div>
+                      )}
+
+                      {orderChannel === 'delivery' && (
+                        <div className="pt-1 animate-fade-in space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <span className="text-[9px] text-[#141B20] uppercase font-bold tracking-wider block">Delivery Address *</span>
+                            <button
+                              type="button"
+                              onClick={handleDetectLocation}
+                              disabled={detectingLocation}
+                              className="text-[9px] font-black text-[#691F1A] hover:underline flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                            >
+                              {detectingLocation ? (
+                                <>
+                                  <RefreshCw className="w-2.5 h-2.5 animate-spin" />
+                                  <span>Detecting...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span>📍 Detect Location</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                          <textarea
+                            required
+                            value={deliveryAddress}
+                            onChange={(e) => {
+                              setDeliveryAddress(e.target.value);
+                              setCoordinates(null);
+                            }}
+                            placeholder="Enter complete address for delivery..."
+                            rows="2"
+                            className="w-full text-xs p-2.5 border border-[#141B20] rounded-xl bg-[#FFF9EE] text-[#141B20] focus:outline-none focus:border-[#691F1A] resize-none font-semibold placeholder:font-normal"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <hr className="border-[#141B20]/60" />
+                  </>
+                )}
 
                 {/* Kitchen Notes */}
                 <div className="space-y-1.5">
