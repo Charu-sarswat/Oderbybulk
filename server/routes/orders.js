@@ -1,0 +1,1631 @@
+const express = require('express');
+const router = express.Router();
+const Order = require('../models/Order');
+const MenuItem = require('../models/MenuItem');
+const InventoryLog = require('../models/InventoryLog');
+const Setting = require('../models/Setting');
+const auth = require('../middleware/auth');
+const authorizeRoles = require('../middleware/role');
+
+// Helper to generate readable order numbers (e.g. ORD-20260731-001)
+const generateOrderNumber = async () => {
+  const now = new Date();
+  const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+  const formatter = new Intl.DateTimeFormat('en-IN', options);
+  const parts = formatter.formatToParts(now);
+  
+  let year = '', month = '', day = '';
+  for (const part of parts) {
+    if (part.type === 'year') year = part.value;
+    if (part.type === 'month') month = part.value;
+    if (part.type === 'day') day = part.value;
+  }
+  
+  const dateStr = `${year}${month}${day}`;
+
+  // Count existing orders placed today matching prefix ORD-YYYYMMDD-
+  const todayCount = await Order.countDocuments({
+    order_number: { $regex: `^ORD-${dateStr}-` }
+  });
+
+  const seqNumber = String(todayCount + 1).padStart(3, '0');
+  return `ORD-${dateStr}-${seqNumber}`;
+};
+
+// @route   GET /api/orders/reports/dashboard
+// @desc    Get dashboard analytics reports (Private - Admin/Staff)
+router.get('/reports/dashboard', auth, authorizeRoles('admin', 'staff', 'kitchen'), async (req, res) => {
+  try {
+    const { period } = req.query;
+    
+    // Define date boundary matching period
+    let startDate = new Date();
+    let prevStartDate = new Date();
+    let prevEndDate = new Date();
+
+    const now = new Date();
+
+    if (period === 'today') {
+      startDate.setHours(0, 0, 0, 0);
+      prevStartDate.setDate(prevStartDate.getDate() - 1);
+      prevStartDate.setHours(0, 0, 0, 0);
+      prevEndDate.setDate(prevEndDate.getDate() - 1);
+      prevEndDate.setHours(23, 59, 59, 999);
+    } else if (period === 'yesterday') {
+      startDate.setDate(startDate.getDate() - 1);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(startDate);
+      endDate.setHours(23, 59, 59, 999);
+
+      prevStartDate.setDate(prevStartDate.getDate() - 2);
+      prevStartDate.setHours(0, 0, 0, 0);
+      prevEndDate.setDate(prevEndDate.getDate() - 2);
+      prevEndDate.setHours(23, 59, 59, 999);
+    } else if (period === '7days') {
+      startDate.setDate(startDate.getDate() - 7);
+      prevStartDate.setDate(prevStartDate.getDate() - 14);
+      prevEndDate.setDate(prevEndDate.getDate() - 7);
+    } else if (period === '30days') {
+      startDate.setDate(startDate.getDate() - 30);
+      prevStartDate.setDate(prevStartDate.getDate() - 60);
+      prevEndDate.setDate(prevEndDate.getDate() - 30);
+    } else {
+      // all time
+      startDate = new Date(0);
+      prevStartDate = new Date(0);
+      prevEndDate = new Date(0);
+    }
+
+    // Fetch current period orders
+    const filter = { created_at: { $gte: startDate } };
+    if (period === 'yesterday') {
+      const yesterdayEnd = new Date();
+      yesterdayEnd.setDate(yesterdayEnd.getDate() - 1);
+      yesterdayEnd.setHours(23, 59, 59, 999);
+      filter.created_at.$lte = yesterdayEnd;
+    }
+    const orders = await Order.find(filter);
+
+    // Fetch previous period orders for sales growth comparison
+    let prevOrders = [];
+    if (period !== 'all') {
+      prevOrders = await Order.find({
+        created_at: { $gte: prevStartDate, $lte: prevEndDate }
+      });
+    }
+
+    // Calculate aggregated stats
+    const totalSales = orders.reduce((sum, o) => o.payment_status === 'paid' ? sum + o.total_amount : sum, 0);
+    const prevSales = prevOrders.reduce((sum, o) => o.payment_status === 'paid' ? sum + o.total_amount : sum, 0);
+
+    let salesGrowth = 0;
+    if (period !== 'all') {
+      if (prevSales === 0) {
+        salesGrowth = totalSales > 0 ? 100 : 0;
+      } else {
+        salesGrowth = Math.round(((totalSales - prevSales) / prevSales) * 100);
+      }
+    }
+
+    const totalOrders = orders.length;
+    const paidOrders = orders.filter(o => o.payment_status === 'paid');
+    const avgTicket = paidOrders.length > 0 ? Math.round(totalSales / paidOrders.length) : 0;
+
+    // Unique customers by phone number
+    const uniquePhones = new Set(orders.map(o => o.customer_phone).filter(Boolean));
+    const totalCustomers = uniquePhones.size;
+
+    // Daily Sales analytics array
+    const salesMap = {};
+    orders.forEach(o => {
+      if (o.payment_status === 'paid') {
+        const day = new Date(o.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+        salesMap[day] = (salesMap[day] || 0) + o.total_amount;
+      }
+    });
+
+    const salesOverTime = Object.keys(salesMap).map(day => ({
+      name: day,
+      sales: salesMap[day]
+    })).sort((a, b) => new Date(a.name) - new Date(b.name));
+
+    // Category distribution from actual items ordered
+    const categoryRevenue = {};
+    orders.forEach(o => {
+      if (o.payment_status === 'paid') {
+        o.items.forEach(item => {
+          const cat = item.category || 'General';
+          categoryRevenue[cat] = (categoryRevenue[cat] || 0) + (item.price * item.quantity);
+        });
+      }
+    });
+
+    const categoryStats = Object.keys(categoryRevenue).map(cat => ({
+      name: cat,
+      value: categoryRevenue[cat]
+    }));
+
+    // If category stats is empty, provide default mock format
+    if (categoryStats.length === 0) {
+      categoryStats.push({ name: 'Chaat', value: 0 });
+    }
+
+    // Payment methods aggregation (actual revenue weights)
+    const paymentMethods = {};
+    orders.forEach(o => {
+      if (o.payment_status === 'paid') {
+        const method = (o.payment_method || 'COUNTER').toUpperCase();
+        paymentMethods[method] = (paymentMethods[method] || 0) + o.total_amount;
+      }
+    });
+
+    const paymentSplit = Object.keys(paymentMethods).map(method => ({
+      method,
+      amount: paymentMethods[method]
+    }));
+
+    if (paymentSplit.length === 0) {
+      paymentSplit.push({ method: 'COUNTER', amount: 0 });
+    }
+
+    // Fetch best selling dishes
+    const popularDishes = [];
+    orders.forEach(o => {
+      o.items.forEach(item => {
+        const existing = popularDishes.find(d => d.name === item.name);
+        if (existing) {
+          existing.total_sold += item.quantity;
+          existing.revenue += (item.price * item.quantity);
+        } else {
+          popularDishes.push({
+            name: item.name,
+            total_sold: item.quantity,
+            revenue: (item.price * item.quantity)
+          });
+        }
+      });
+    });
+    popularDishes.sort((a, b) => b.total_sold - a.total_sold);
+
+    // Calculate hourly peak trends
+    const hourlyMap = {};
+    orders.forEach(o => {
+      const hour = new Date(o.created_at).getHours();
+      let label = `${hour % 12 || 12} ${hour >= 12 ? 'PM' : 'AM'}`;
+      hourlyMap[label] = (hourlyMap[label] || 0) + 1;
+    });
+
+    const peakHours = Object.keys(hourlyMap).map(hour => ({
+      hour,
+      orders: hourlyMap[hour]
+    })).slice(0, 8);
+
+    res.json({
+      metrics: {
+        totalSales,
+        salesGrowth,
+        totalOrders,
+        avgTicket,
+        totalCustomers
+      },
+      salesTrend: salesOverTime.length > 0 ? salesOverTime : [{ name: 'Today', sales: 0 }],
+      peakHours: peakHours.length > 0 ? peakHours : [{ hour: '12 PM', orders: 0 }],
+      categoryShare: categoryStats,
+      paymentSplit,
+      popularDishes: popularDishes.slice(0, 5)
+    });
+  } catch (err) {
+    console.error('Fetch dashboard reports error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   GET /api/orders/reports/customers
+// @desc    Get registered and guest customers overview for directory (Private - Admin/Staff)
+router.get('/reports/customers', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
+  try {
+    const Customer = require('../models/Customer');
+    
+    // Fetch registered customer base
+    const registeredUsers = await Customer.find().sort({ created_at: -1 });
+
+    // Fetch guest checkouts list from orders
+    const orders = await Order.find().sort({ created_at: -1 });
+
+    const registeredList = await Promise.all(registeredUsers.map(async (u) => {
+      const userOrders = orders.filter(o => o.customer_phone === u.phone);
+      const totalSpent = userOrders.reduce((sum, o) => sum + o.total_amount, 0);
+      return {
+        id: u._id,
+        name: u.name,
+        phone: u.phone,
+        email: u.email || '',
+        created_at: u.created_at,
+        last_order_at: userOrders.length > 0 ? userOrders[0].created_at : u.created_at,
+        total_orders: userOrders.length,
+        total_spent: totalSpent
+      };
+    }));
+
+    // Group guest checkouts (exclude those that match registered customer phone numbers)
+    const registeredPhones = new Set(registeredUsers.map(u => u.phone));
+    const guestMap = {};
+    orders.forEach(o => {
+      if (!o.customer_phone || registeredPhones.has(o.customer_phone)) return;
+      
+      const phone = o.customer_phone;
+      if (!guestMap[phone]) {
+        guestMap[phone] = {
+          name: o.customer_name || 'Guest Customer',
+          phone: phone,
+          created_at: o.created_at,
+          last_order_at: o.created_at,
+          total_orders: 0,
+          total_spent: 0
+        };
+      }
+      
+      guestMap[phone].total_orders += 1;
+      guestMap[phone].total_spent += o.total_amount;
+      if (new Date(o.created_at) > new Date(guestMap[phone].last_order_at)) {
+        guestMap[phone].last_order_at = o.created_at;
+      }
+      if (new Date(o.created_at) < new Date(guestMap[phone].created_at)) {
+        guestMap[phone].created_at = o.created_at;
+      }
+    });
+
+    const guestList = Object.values(guestMap);
+
+    res.json({
+      registered: registeredList,
+      guests: guestList
+    });
+  } catch (err) {
+    console.error('Fetch customer reports error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   GET /api/orders
+// @desc    Get all orders (with RBAC date filter for Staff)
+// @access  Private (Admin/Staff/Kitchen)
+router.get('/', auth, authorizeRoles('admin', 'staff', 'kitchen'), async (req, res) => {
+  try {
+    const { status, date } = req.query;
+    const filter = {};
+
+    if (status) {
+      filter.status = status;
+    }
+
+    // India Timezone Date Range (UTC+5:30)
+    const indiaOffset = 5.5 * 60 * 60 * 1000;
+
+    // RBAC Date Protection: Staff can ONLY see today's orders
+    if (req.user.role === 'staff') {
+      const now = new Date();
+      const startOfDay = new Date(now.getTime() + indiaOffset);
+      startOfDay.setUTCHours(0, 0, 0, 0);
+      const dbStart = new Date(startOfDay.getTime() - indiaOffset);
+
+      const endOfDay = new Date(now.getTime() + indiaOffset);
+      endOfDay.setUTCHours(23, 59, 59, 999);
+      const dbEnd = new Date(endOfDay.getTime() - indiaOffset);
+
+      filter.created_at = { $gte: dbStart, $lte: dbEnd };
+    } else if (date) {
+      const selectedDate = new Date(date);
+      const startOfDay = new Date(selectedDate.getTime());
+      startOfDay.setUTCHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(selectedDate.getTime());
+      endOfDay.setUTCHours(23, 59, 59, 999);
+
+      filter.created_at = { $gte: startOfDay, $lte: endOfDay };
+    }
+
+    const orders = await Order.find(filter).sort({ created_at: -1 });
+
+    // Auto-sync active Borzo courier status & rider assignments directly from Borzo API
+    const activeBorzoOrders = orders.filter(o => o.order_channel === 'delivery' && o.delivery_job_id && o.delivery_job_id.startsWith('BRZ-') && !['delivered', 'cancelled'].includes(o.status));
+    if (activeBorzoOrders.length > 0) {
+      try {
+        const { getBorzoOrderDetails } = require('../config/borzo');
+        await Promise.all(activeBorzoOrders.slice(0, 5).map(async (actOrder) => {
+          try {
+            const borzoDetails = await getBorzoOrderDetails(actOrder.delivery_job_id);
+            if (borzoDetails) {
+              let changed = false;
+              if (borzoDetails.status && actOrder.delivery_status !== borzoDetails.status) {
+                actOrder.delivery_status = borzoDetails.status;
+                changed = true;
+              }
+              if (borzoDetails.courier && (borzoDetails.courier.name || borzoDetails.courier.phone)) {
+                const cName = [borzoDetails.courier.name, borzoDetails.courier.surname].filter(Boolean).join(' ');
+                if (cName && actOrder.delivery_rider_name !== cName) {
+                  actOrder.delivery_rider_name = cName;
+                  changed = true;
+                }
+                if (borzoDetails.courier.phone && actOrder.delivery_rider_phone !== borzoDetails.courier.phone) {
+                  actOrder.delivery_rider_phone = borzoDetails.courier.phone;
+                  changed = true;
+                }
+              } else if (!borzoDetails.courier && (actOrder.delivery_rider_name === 'Borzo Bike Rider' || actOrder.delivery_rider_name === 'Borzo Rider' || actOrder.delivery_status === 'new' || actOrder.delivery_status === 'available')) {
+                actOrder.delivery_rider_name = null;
+                actOrder.delivery_rider_phone = null;
+                changed = true;
+              }
+              if (['completed', 'delivered', 'finished'].includes(borzoDetails.status)) {
+                if (actOrder.status !== 'delivered') {
+                  actOrder.status = 'delivered';
+                  actOrder.payment_status = 'paid';
+                  changed = true;
+                }
+              } else if (borzoDetails.status === 'active') {
+                const pickupPoint = borzoDetails.points && borzoDetails.points[0];
+                const isPickupVisited = Boolean(pickupPoint && (pickupPoint.courier_visit_datetime || pickupPoint.is_visited || pickupPoint.delivery?.status === 'completed'));
+                if (isPickupVisited && actOrder.status !== 'out_for_delivery') {
+                  actOrder.status = 'out_for_delivery';
+                  changed = true;
+                }
+              }
+              if (changed) {
+                await actOrder.save();
+              }
+            }
+          } catch (err) {}
+        }));
+      } catch (err) {}
+    }
+
+    const formatted = orders.map(o => ({
+      id: o.order_number || o._id,
+      _id: o._id,
+      order_number: o.order_number,
+      table_id: o.table_id,
+      table_number: o.table_snapshot || 'Takeaway',
+      customer_id: o.customer_id,
+      customer_name: o.customer_name,
+      customer_phone: o.customer_phone,
+      order_channel: o.order_channel,
+      admin_created: Boolean(o.admin_created),
+      scheduled_time: o.scheduled_time,
+      status: o.status,
+      payment_status: o.payment_status,
+      payment_method: o.payment_method,
+      payment_utr: o.payment_utr,
+      total_amount: o.total_amount,
+      notes: o.notes,
+      service_type: o.service_type || 'FOOD',
+      delivery_address: o.delivery_address || '',
+      delivery_job_id: o.delivery_job_id || null,
+      delivery_status: o.delivery_status || null,
+      delivery_rider_name: o.delivery_rider_name || null,
+      delivery_rider_phone: o.delivery_rider_phone || null,
+      pickup_otp: o.pickup_otp || null,
+      delivery_otp: o.delivery_otp || null,
+      pickup_tracking_url: o.pickup_tracking_url || null,
+      delivery_tracking_url: o.delivery_tracking_url || null,
+      items: o.items.map(item => ({
+        id: item._id,
+        menu_item_id: item.menu_item_id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        notes: item.notes
+      })),
+      created_at: o.created_at,
+      updated_at: o.updated_at
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error('Get orders error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   GET /api/orders/:id
+// @desc    Get single order by ID or order_number (Public - for tracking)
+router.get('/:id', async (req, res) => {
+  try {
+    let o = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      o = await Order.findById(req.params.id);
+    }
+    if (!o) {
+      o = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!o) return res.status(404).json({ message: 'Order not found' });
+
+    res.json({
+      id: o.order_number || o._id,
+      _id: o._id,
+      order_number: o.order_number,
+      table_id: o.table_id,
+      table_number: o.table_snapshot || 'Takeaway',
+      customer_name: o.customer_name,
+      customer_phone: o.customer_phone,
+      order_channel: o.order_channel,
+      scheduled_time: o.scheduled_time,
+      status: o.status,
+      payment_status: o.payment_status,
+      payment_method: o.payment_method,
+      payment_utr: o.payment_utr,
+      total_amount: o.total_amount,
+      notes: o.notes,
+      service_type: o.service_type || 'FOOD',
+      delivery_address: o.delivery_address || '',
+      delivery_job_id: o.delivery_job_id || null,
+      delivery_status: o.delivery_status || null,
+      delivery_rider_name: o.delivery_rider_name || null,
+      delivery_rider_phone: o.delivery_rider_phone || null,
+      pickup_otp: o.pickup_otp || null,
+      delivery_otp: o.delivery_otp || null,
+      pickup_tracking_url: o.pickup_tracking_url || null,
+      delivery_tracking_url: o.delivery_tracking_url || null,
+      items: o.items.map(item => ({
+        id: item._id,
+        menu_item_id: item.menu_item_id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        notes: item.notes
+      })),
+      created_at: o.created_at,
+      updated_at: o.updated_at
+    });
+  } catch (err) {
+    console.error('Get single order error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   POST /api/orders
+// @desc    Create new order (Public/Customer)
+router.post('/', async (req, res) => {
+  const { 
+    table_id, table_snapshot, customer_id, customer_name, customer_phone,
+    order_channel, scheduled_time, payment_method, payment_utr, notes, items, delivery_address,
+    admin_created, latitude, longitude, service_type
+  } = req.body;
+
+  // Check Store Open/Closed & Operating Hours Restriction (for non-admin orders)
+  if (!admin_created) {
+    // 1. Home Delivery Enabled Check
+    if (order_channel === 'delivery') {
+      const deliveryStatusSetting = await Setting.findOne({ key: 'is_delivery_enabled' });
+      const deliveryDisabledNotice = await Setting.findOne({ key: 'delivery_disabled_notice' });
+      if (deliveryStatusSetting && (deliveryStatusSetting.value === false || deliveryStatusSetting.value === 'false')) {
+        const msg = (deliveryDisabledNotice && deliveryDisabledNotice.value) || 'Home Delivery is temporarily paused. Please choose Takeaway or Dine-In.';
+        return res.status(403).json({ message: msg, delivery_disabled: true });
+      }
+    }
+
+    const storeStatusSetting = await Setting.findOne({ key: 'is_store_open' });
+    const storeClosedMsgSetting = await Setting.findOne({ key: 'store_closed_message' });
+    const storeOpenTimeSetting = await Setting.findOne({ key: 'store_opening_time' });
+    const storeCloseTimeSetting = await Setting.findOne({ key: 'store_closing_time' });
+
+    if (storeStatusSetting && (storeStatusSetting.value === false || storeStatusSetting.value === 'false')) {
+      const closedMsg = (storeClosedMsgSetting && storeClosedMsgSetting.value) || 'We are currently closed for orders. Please check back later!';
+      return res.status(403).json({ message: closedMsg, store_closed: true });
+    }
+
+    const openTimeStr = (storeOpenTimeSetting && storeOpenTimeSetting.value) || '11:30';
+    const closeTimeStr = (storeCloseTimeSetting && storeCloseTimeSetting.value) || '23:30';
+
+    const [openH, openM] = openTimeStr.split(':').map(Number);
+    const [closeH, closeM] = closeTimeStr.split(':').map(Number);
+    const openMinutes = (openH * 60) + openM;
+    const closeMinutes = (closeH * 60) + closeM;
+
+    if (scheduled_time) {
+      // Validate scheduled date/time falls within operating hours
+      const schedDate = new Date(scheduled_time);
+      const schedTimeStr = schedDate.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit' });
+      const [sH, sM] = schedTimeStr.split(':').map(Number);
+      const schedMinutes = (sH * 60) + sM;
+
+      const isWithinHours = closeMinutes > openMinutes
+        ? (schedMinutes >= openMinutes && schedMinutes <= closeMinutes)
+        : (schedMinutes >= openMinutes || schedMinutes <= closeMinutes);
+
+      if (!isWithinHours) {
+        return res.status(400).json({ 
+          message: `Scheduled time (${schedTimeStr}) must be between operating hours (${openTimeStr} to ${closeTimeStr}).` 
+        });
+      }
+    } else {
+      // Immediate order: validate current IST time falls within operating hours
+      const nowIST = new Date();
+      const currentISTTimeStr = nowIST.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit' });
+      const [curH, curM] = currentISTTimeStr.split(':').map(Number);
+      const currentMinutes = (curH * 60) + curM;
+
+      const isWithinHours = closeMinutes > openMinutes
+        ? (currentMinutes >= openMinutes && currentMinutes <= closeMinutes)
+        : (currentMinutes >= openMinutes || currentMinutes <= closeMinutes);
+
+      if (!isWithinHours) {
+        const closedMsg = (storeClosedMsgSetting && storeClosedMsgSetting.value) || 
+          `We are currently closed. Our ordering hours are ${openTimeStr} to ${closeTimeStr}. You may schedule an order for later!`;
+        return res.status(403).json({ message: closedMsg, store_closed: true });
+      }
+    }
+  }
+
+  // Mandatory Customer Name and 10-digit Phone Validation for customer orders
+  if (!admin_created) {
+    if (!customer_name || !customer_name.trim()) {
+      return res.status(400).json({ message: 'Customer name is compulsory' });
+    }
+
+    if (!customer_phone || customer_phone.trim().replace(/\D/g, '').length < 10) {
+      return res.status(400).json({ message: 'Customer phone number is compulsory and must be at least 10 digits' });
+    }
+  } else {
+    const isDineInAdmin = admin_created && order_channel === 'dine_in';
+    if (!isDineInAdmin) {
+      if (!customer_name || !customer_name.trim()) {
+        return res.status(400).json({ message: 'Customer name is compulsory' });
+      }
+
+      if (!customer_phone || customer_phone.trim().length < 10) {
+        return res.status(400).json({ message: 'Customer phone number is compulsory and must be at least 10 digits' });
+      }
+    } else {
+      if (customer_phone && customer_phone.trim().length > 0 && customer_phone.trim().length < 10) {
+        return res.status(400).json({ message: 'Customer phone number must be at least 10 digits if provided' });
+      }
+    }
+  }
+
+  if (order_channel === 'delivery' && (!delivery_address || !delivery_address.trim())) {
+    return res.status(400).json({ message: 'Delivery address is compulsory for delivery orders' });
+  }
+
+  if (order_channel === 'delivery' && payment_method === 'cod') {
+    return res.status(400).json({ message: 'Cash on Delivery payment method is disabled for home delivery orders.' });
+  }
+
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ message: 'Order must contain at least one item' });
+  }
+
+  try {
+    const order_number = await generateOrderNumber();
+    let total_amount = 0;
+    const orderItems = [];
+
+    for (const item of items) {
+      let itemPrice = Number(item.price);
+      let itemName = item.name;
+
+      if (item.menu_item_id) {
+        const menuItem = await MenuItem.findById(item.menu_item_id);
+        if (menuItem) {
+          itemName = menuItem.name;
+          // Apply pricing tier based on channel
+          if (order_channel === 'delivery' && menuItem.delivery_price > 0) {
+            itemPrice = menuItem.delivery_price;
+          } else {
+            itemPrice = menuItem.price;
+          }
+
+          // Deduct stock quantity automatically only if not unlimited stock
+          if (!menuItem.is_unlimited_stock) {
+            const prevStock = menuItem.stock_quantity;
+            const newStock = Math.max(0, prevStock - item.quantity);
+            menuItem.stock_quantity = newStock;
+            if (menuItem.auto_out_of_stock && newStock === 0) {
+              menuItem.is_available = false;
+            }
+            await menuItem.save();
+
+            // Log inventory audit
+            await InventoryLog.create({
+              menu_item_id: menuItem._id,
+              change_type: 'ORDER_DEDUCT',
+              quantity_change: -item.quantity,
+              previous_stock: prevStock,
+              new_stock: newStock,
+              reason: `Auto deduction for new order`,
+              recorded_by: customer_name || 'System'
+            });
+          }
+
+          // Process raw materials recipe deduction
+          if (menuItem.recipe && menuItem.recipe.length > 0) {
+            const RawMaterial = require('../models/RawMaterial');
+            for (const ingredient of menuItem.recipe) {
+              if (ingredient.raw_material_id) {
+                const rawMat = await RawMaterial.findById(ingredient.raw_material_id);
+                if (rawMat) {
+                  const requiredQty = Number(ingredient.quantity_required) * Number(item.quantity);
+                  const prevRawStock = rawMat.stock_quantity;
+                  const newRawStock = Math.max(0, prevRawStock - requiredQty);
+                  
+                  rawMat.stock_quantity = newRawStock;
+                  await rawMat.save();
+                  
+                  // Log raw material inventory audit
+                  await InventoryLog.create({
+                    raw_material_id: rawMat._id,
+                    change_type: 'ORDER_DEDUCT',
+                    quantity_change: -requiredQty,
+                    previous_stock: prevRawStock,
+                    new_stock: newRawStock,
+                    reason: `Auto deduction for Order #${order_number}`,
+                    recorded_by: customer_name || 'System'
+                  });
+
+                  // If this raw material ran out, auto mark any linked menu items as Sold Out
+                  if (newRawStock === 0) {
+                    const linkedItems = await MenuItem.find({ 
+                      'recipe.raw_material_id': rawMat._id 
+                    });
+                    for (const lItem of linkedItems) {
+                      if (lItem.auto_out_of_stock) {
+                        lItem.is_available = false;
+                        await lItem.save();
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      const lineTotal = itemPrice * Number(item.quantity);
+      total_amount += lineTotal;
+
+      orderItems.push({
+        menu_item_id: item.menu_item_id || null,
+        name: itemName,
+        quantity: Number(item.quantity),
+        price: itemPrice,
+        notes: item.notes || ''
+      });
+    }
+
+    if (order_channel === 'delivery') {
+      const deliveryFeeSetting = await Setting.findOne({ key: 'delivery_fee' });
+      const thresholdSetting = await Setting.findOne({ key: 'free_delivery_threshold' });
+      
+      const deliveryFee = deliveryFeeSetting ? Number(deliveryFeeSetting.value) : 45;
+      const freeDeliveryThreshold = thresholdSetting ? Number(thresholdSetting.value) : 399;
+
+      if (total_amount < freeDeliveryThreshold) {
+        total_amount += deliveryFee;
+      }
+    }
+
+    const pickupOtp = order_channel === 'delivery' ? Math.floor(1000 + Math.random() * 9000).toString() : '';
+    const deliveryOtp = order_channel === 'delivery' ? Math.floor(1000 + Math.random() * 9000).toString() : '';
+
+    const newOrder = new Order({
+      order_number,
+      table_id: table_id || null,
+      table_snapshot: table_snapshot || req.body.table_number_override || 'Takeaway',
+      customer_id: customer_id || null,
+      customer_name: customer_name || 'Guest Customer',
+      customer_phone: customer_phone ? customer_phone.trim() : '',
+      admin_created: admin_created || false,
+      order_channel: order_channel || 'dine_in',
+      scheduled_time: scheduled_time ? new Date(scheduled_time) : null,
+      status: req.body.status || 'received',
+      payment_status: 'pending',
+      payment_method: payment_method || 'upi',
+      payment_utr: payment_utr || '',
+      total_amount,
+      notes: notes || '',
+      service_type: service_type || 'FOOD',
+      items: orderItems,
+      delivery_address: delivery_address || '',
+      pickup_otp: pickupOtp,
+      delivery_otp: deliveryOtp,
+      latitude: latitude || null,
+      longitude: longitude || null
+    });
+
+    await newOrder.save();
+
+    // Broadcast socket event for real-time kitchen & admin screens
+    const io = req.app.get('socketio');
+    if (io) {
+      io.emit('order_created', {
+        id: newOrder.order_number || newOrder._id,
+        _id: newOrder._id,
+        order_number: newOrder.order_number,
+        table_number: newOrder.table_snapshot,
+        customer_name: newOrder.customer_name,
+        customer_phone: newOrder.customer_phone,
+        order_channel: newOrder.order_channel,
+        scheduled_time: newOrder.scheduled_time,
+        total_amount: newOrder.total_amount,
+        status: newOrder.status,
+        admin_created: Boolean(newOrder.admin_created),
+        payment_status: newOrder.payment_status,
+        payment_method: newOrder.payment_method,
+        notes: newOrder.notes || '',
+        service_type: newOrder.service_type || 'FOOD',
+        delivery_address: newOrder.delivery_address,
+        pickup_otp: newOrder.pickup_otp,
+        delivery_otp: newOrder.delivery_otp,
+        pickup_tracking_url: newOrder.pickup_tracking_url || '',
+        delivery_tracking_url: newOrder.delivery_tracking_url || '',
+        items: newOrder.items.map(item => ({
+          id: item._id,
+          menu_item_id: item.menu_item_id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          notes: item.notes
+        })),
+        created_at: newOrder.created_at
+      });
+    }
+
+    // Send Web Push notification to registered administrators
+    try {
+      const PushSubscription = require('../models/PushSubscription');
+      const { sendPushNotification } = require('../config/webPush');
+      
+      const adminSubscriptions = await PushSubscription.find();
+      const payload = {
+        title: 'New Order Placed! 🍽️',
+        body: `${newOrder.customer_name} placed a ${newOrder.order_channel.toUpperCase().replace('_', ' ')} order (${newOrder.order_number}) for ₹${newOrder.total_amount}.`,
+        url: `/admin/live-orders`,
+        icon: '/logo.png',
+        badge: '/logo.png'
+      };
+
+      for (const sub of adminSubscriptions) {
+        const isExpired = await sendPushNotification(sub.subscription, payload);
+        if (isExpired) {
+          await PushSubscription.deleteOne({ _id: sub._id });
+        }
+      }
+    } catch (pushErr) {
+      console.error('Error broadcasting push notifications:', pushErr.message);
+    }
+
+    res.status(201).json({
+      id: newOrder.order_number || newOrder._id,
+      _id: newOrder._id,
+      order_number: newOrder.order_number,
+      total_amount: newOrder.total_amount,
+      status: newOrder.status,
+      message: 'Order placed successfully!'
+    });
+
+  } catch (err) {
+    console.error('Create order error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   PUT /api/orders/:id/items
+// @desc    Update order items and adjust raw materials inventory (Admin/Staff only)
+router.put('/:id/items', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
+  const { items, payment_status, payment_method, customer_name, customer_phone, notes, status, delivery_address } = req.body;
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ message: 'Order must contain at least one item' });
+  }
+
+  try {
+    let order = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      order = await Order.findById(req.params.id);
+    }
+    if (!order) {
+      order = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Protect completed/cancelled orders from being edited
+    if (['served', 'delivered', 'cancelled'].includes(order.status)) {
+      return res.status(400).json({ message: 'Completed or cancelled orders cannot be edited' });
+    }
+
+    const MenuItem = mongoose.model('MenuItem');
+    const RawMaterial = require('../models/RawMaterial');
+    const InventoryLog = require('../models/InventoryLog');
+
+    // 1. Restore raw materials from OLD items
+    for (const oldItem of order.items) {
+      if (oldItem.menu_item_id) {
+        const mItem = await MenuItem.findById(oldItem.menu_item_id);
+        if (mItem && mItem.recipe && mItem.recipe.length > 0) {
+          for (const ing of mItem.recipe) {
+            if (ing.raw_material_id) {
+              const rawMat = await RawMaterial.findById(ing.raw_material_id);
+              if (rawMat) {
+                const oldRequiredQty = Number(ing.quantity_required) * Number(oldItem.quantity);
+                rawMat.stock_quantity += oldRequiredQty;
+                await rawMat.save();
+
+                await InventoryLog.create({
+                  raw_material_id: rawMat._id,
+                  change_type: 'STOCK_ADD',
+                  quantity_change: oldRequiredQty,
+                  previous_stock: rawMat.stock_quantity - oldRequiredQty,
+                  new_stock: rawMat.stock_quantity,
+                  reason: `Restored: Order #${order.order_number} items adjustment`,
+                  recorded_by: req.user.username || 'System'
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Compute new items and deduct raw materials
+    let total_amount = 0;
+    const newOrderItems = [];
+
+    for (const item of items) {
+      let itemPrice = Number(item.price);
+      let itemName = item.name;
+
+      if (item.menu_item_id) {
+        const menuItem = await MenuItem.findById(item.menu_item_id);
+        if (menuItem) {
+          itemName = menuItem.name;
+          itemPrice = Number(menuItem.price);
+
+          // Deduct raw materials recipe
+          if (menuItem.recipe && menuItem.recipe.length > 0) {
+            for (const ing of menuItem.recipe) {
+              if (ing.raw_material_id) {
+                const rawMat = await RawMaterial.findById(ing.raw_material_id);
+                if (rawMat) {
+                  const newRequiredQty = Number(ing.quantity_required) * Number(item.quantity);
+                  const prevRawStock = rawMat.stock_quantity;
+                  const newRawStock = Math.max(0, prevRawStock - newRequiredQty);
+
+                  rawMat.stock_quantity = newRawStock;
+                  await rawMat.save();
+
+                  await InventoryLog.create({
+                    raw_material_id: rawMat._id,
+                    change_type: 'ORDER_DEDUCT',
+                    quantity_change: -newRequiredQty,
+                    previous_stock: prevRawStock,
+                    new_stock: newRawStock,
+                    reason: `Auto deduction for Order #${order.order_number} adjustment`,
+                    recorded_by: req.user.username || 'System'
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+
+      const lineTotal = itemPrice * Number(item.quantity);
+      total_amount += lineTotal;
+
+      newOrderItems.push({
+        menu_item_id: item.menu_item_id || null,
+        name: itemName,
+        quantity: Number(item.quantity),
+        price: itemPrice,
+        notes: item.notes || ''
+      });
+    }
+
+    order.items = newOrderItems;
+    order.total_amount = total_amount;
+    if (payment_status !== undefined) order.payment_status = payment_status;
+    if (payment_method !== undefined) order.payment_method = payment_method;
+    if (customer_name !== undefined) order.customer_name = customer_name;
+    if (customer_phone !== undefined) order.customer_phone = customer_phone;
+    if (notes !== undefined) order.notes = notes;
+    if (status !== undefined) order.status = status;
+    if (delivery_address !== undefined) order.delivery_address = delivery_address;
+    await order.save();
+
+    // Broadcast socket event for real-time kitchen & admin screens
+    const io = req.app.get('socketio');
+    if (io) {
+      const payload = {
+        id: order.order_number || order._id,
+        _id: order._id,
+        order_number: order.order_number,
+        table_number: order.table_snapshot,
+        customer_name: order.customer_name,
+        customer_phone: order.customer_phone,
+        order_channel: order.order_channel,
+        scheduled_time: order.scheduled_time,
+        total_amount: order.total_amount,
+        status: order.status,
+        payment_status: order.payment_status,
+        payment_method: order.payment_method,
+        delivery_address: order.delivery_address,
+        items: order.items.map(i => ({
+          id: i._id,
+          menu_item_id: i.menu_item_id,
+          name: i.name,
+          quantity: i.quantity,
+          price: i.price,
+          notes: i.notes
+        })),
+        created_at: order.created_at
+      };
+      io.emit('order_status_change', payload);
+      if (order.order_number) {
+        io.to(`order_${order.order_number}`).emit('order_status_change', payload);
+      }
+    }
+
+    res.json({
+      message: 'Order items updated successfully',
+      order: {
+        id: order.order_number || order._id,
+        order_number: order.order_number,
+        total_amount: order.total_amount,
+        items: order.items
+      }
+    });
+  } catch (err) {
+    console.error('Update order items error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   PUT /api/orders/:id/status
+// @desc    Update order status / payment status (Admin/Staff/Kitchen)
+router.put('/:id/status', auth, authorizeRoles('admin', 'staff', 'kitchen'), async (req, res) => {
+  const { status, payment_status, payment_utr, delivery_job_id, delivery_status, delivery_rider_name, delivery_rider_phone, delivery_tracking_url, delivery_otp } = req.body;
+
+  try {
+    let order = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      order = await Order.findById(req.params.id);
+    }
+    if (!order) {
+      order = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (delivery_job_id !== undefined) {
+      order.delivery_job_id = delivery_job_id;
+      order.delivery_status = delivery_status || (order.delivery_status || 'assigned');
+    }
+    if (delivery_status !== undefined) order.delivery_status = delivery_status;
+    if (delivery_rider_name !== undefined) order.delivery_rider_name = delivery_rider_name;
+    if (delivery_rider_phone !== undefined) order.delivery_rider_phone = delivery_rider_phone;
+    if (delivery_tracking_url !== undefined) order.delivery_tracking_url = delivery_tracking_url;
+    if (delivery_otp !== undefined) order.delivery_otp = delivery_otp;
+
+    // Generate delivery OTP if missing for delivery order
+    if (order.order_channel === 'delivery' && !order.delivery_otp) {
+      order.delivery_otp = Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    if (status) {
+      if (status === 'cancelled') {
+        if (['served', 'delivered'].includes(order.status)) {
+          return res.status(400).json({ message: 'Completed orders (Served/Delivered) cannot be cancelled.' });
+        }
+        if (order.status === 'out_for_delivery') {
+          return res.status(400).json({ message: 'Cannot cancel order once it is Out For Delivery (courier in transit).' });
+        }
+      }
+
+      order.status = status;
+      
+      const io = req.app.get('socketio');
+
+      // Cancellation State: Automatically cancel active delivery job if order is cancelled
+      if (status === 'cancelled' && order.order_channel === 'delivery' && order.delivery_job_id) {
+        try {
+          const { cancelBorzoDeliveryJob } = require('../config/borzo');
+          const cancelResult = await cancelBorzoDeliveryJob(order.delivery_job_id);
+          console.log(`[Delivery Cancellation] Order #${order.order_number} delivery job ${order.delivery_job_id} cancelled with provider:`, cancelResult?.success);
+          order.delivery_status = 'cancelled';
+        } catch (cancelErr) {
+          console.error('[Hyperlocal Delivery] Cancellation hook error:', cancelErr.message);
+        }
+      }
+    }
+    if (payment_status) order.payment_status = payment_status;
+    if (payment_utr !== undefined) order.payment_utr = payment_utr;
+
+    await order.save();
+
+    // Broadcast socket update
+    const io = req.app.get('socketio');
+    if (io) {
+      const payload = {
+        id: order.order_number || order._id,
+        _id: order._id,
+        order_number: order.order_number,
+        order_channel: order.order_channel,
+        status: order.status,
+        payment_status: order.payment_status,
+        delivery_job_id: order.delivery_job_id,
+        delivery_status: order.delivery_status,
+        delivery_rider_name: order.delivery_rider_name,
+        delivery_rider_phone: order.delivery_rider_phone,
+        pickup_otp: order.pickup_otp,
+        delivery_otp: order.delivery_otp,
+        pickup_tracking_url: order.pickup_tracking_url,
+        delivery_tracking_url: order.delivery_tracking_url,
+        updated_at: order.updated_at
+      };
+      io.emit('order_status_updated', payload);
+      io.to(`order_${order._id}`).emit('order_status_change', payload);
+      if (order.order_number) {
+        io.to(`order_${order.order_number}`).emit('order_status_change', payload);
+      }
+    }
+
+    res.json({
+      id: order._id,
+      status: order.status,
+      payment_status: order.payment_status,
+      delivery_job_id: order.delivery_job_id,
+      delivery_status: order.delivery_status,
+      delivery_rider_name: order.delivery_rider_name,
+      delivery_rider_phone: order.delivery_rider_phone,
+      pickup_otp: order.pickup_otp,
+      delivery_otp: order.delivery_otp,
+      pickup_tracking_url: order.pickup_tracking_url,
+      delivery_tracking_url: order.delivery_tracking_url,
+      message: 'Order updated'
+    });
+  } catch (err) {
+    console.error('Update order status error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   POST /api/orders/:id/book-rider
+// @desc    Manually dispatch / book a delivery rider via active delivery provider (Borzo/Shadowfax)
+// @access  Private (Admin/Staff/Kitchen)
+router.post('/:id/book-rider', auth, authorizeRoles('admin', 'staff', 'kitchen'), async (req, res) => {
+  try {
+    let order = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      order = await Order.findById(req.params.id);
+    }
+    if (!order) {
+      order = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (order.order_channel !== 'delivery') {
+      return res.status(400).json({ message: 'Rider booking is only available for Home Delivery orders.' });
+    }
+
+    if (!order.pickup_otp) {
+      order.pickup_otp = Math.floor(1000 + Math.random() * 9000).toString();
+    }
+    if (!order.delivery_otp) {
+      order.delivery_otp = Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    const provider = process.env.DELIVERY_PROVIDER || 'borzo';
+    let job = null;
+
+    if (provider === 'borzo') {
+      const { createBorzoDeliveryJob } = require('../config/borzo');
+      job = await createBorzoDeliveryJob(order);
+    } else {
+      const { createShadowfaxDeliveryJob } = require('../config/shadowfax');
+      job = await createShadowfaxDeliveryJob(order);
+    }
+
+    if (!job || !job.success) {
+      const errMsg = job?.error || 'Delivery provider rejected rider dispatch request.';
+      return res.status(400).json({ message: errMsg, error: job?.error });
+    }
+
+    order.delivery_job_id = job.delivery_id;
+    order.delivery_status = job.status || 'new';
+    order.delivery_rider_name = job.rider_name || null;
+    order.delivery_rider_phone = job.rider_phone || null;
+    order.pickup_tracking_url = job.pickup_tracking_url || null;
+    order.delivery_tracking_url = job.tracking_url || null;
+
+    await order.save();
+
+    const io = req.app.get('socketio');
+    if (io) {
+      broadcastOrderStatus(order, io);
+    }
+
+    res.json({
+      message: `${provider.toUpperCase()} rider requested successfully!`,
+      order: {
+        id: order._id,
+        order_number: order.order_number,
+        delivery_job_id: order.delivery_job_id,
+        delivery_status: order.delivery_status,
+        delivery_rider_name: order.delivery_rider_name,
+        delivery_rider_phone: order.delivery_rider_phone,
+        pickup_tracking_url: order.pickup_tracking_url,
+        delivery_tracking_url: order.delivery_tracking_url,
+        pickup_otp: order.pickup_otp,
+        delivery_otp: order.delivery_otp
+      }
+    });
+  } catch (err) {
+    console.error('Book delivery rider error:', err.message);
+    res.status(500).json({ message: 'Server error booking rider: ' + err.message });
+  }
+});
+
+// @route   POST /api/orders/:id/cancel-rider
+// @desc    Cancel Borzo delivery job
+// @access  Private (Admin/Staff/Kitchen)
+router.post('/:id/cancel-rider', auth, authorizeRoles('admin', 'staff', 'kitchen'), async (req, res) => {
+  try {
+    let order = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      order = await Order.findById(req.params.id);
+    }
+    if (!order) {
+      order = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (!order.delivery_job_id) {
+      return res.status(400).json({ message: 'No active delivery job found on this order' });
+    }
+
+    const { cancelBorzoDeliveryJob } = require('../config/borzo');
+    const result = await cancelBorzoDeliveryJob(order.delivery_job_id);
+
+    order.delivery_job_id = null;
+    order.delivery_status = null;
+    order.delivery_rider_name = null;
+    order.delivery_rider_phone = null;
+    order.pickup_tracking_url = null;
+    order.delivery_tracking_url = null;
+
+    await order.save();
+
+    const io = req.app.get('socketio');
+    if (io) {
+      broadcastOrderStatus(order, io);
+    }
+
+    res.json({
+      message: 'Delivery booking cancelled successfully',
+      result
+    });
+  } catch (err) {
+    console.error('Cancel delivery rider error:', err.message);
+    res.status(500).json({ message: 'Server error cancelling rider: ' + err.message });
+  }
+});
+
+// @route   PUT /api/orders/:id/payment
+// @desc    Settle order payment status (Admin/Staff)
+// @access  Private (Admin/Staff)
+router.put('/:id/payment', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
+  const { payment_status, payment_utr } = req.body;
+  
+  try {
+    let order = null;
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      order = await Order.findById(req.params.id);
+    }
+    if (!order) {
+      order = await Order.findOne({ order_number: req.params.id });
+    }
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (payment_status) order.payment_status = payment_status;
+    if (payment_utr !== undefined) order.payment_utr = payment_utr;
+
+    await order.save();
+
+    // Broadcast socket update
+    const io = req.app.get('socketio');
+    if (io) {
+      const payload = {
+        id: order.order_number || order._id,
+        _id: order._id,
+        order_number: order.order_number,
+        status: order.status,
+        payment_status: order.payment_status,
+        updated_at: order.updated_at
+      };
+      io.emit('order_status_updated', payload);
+      io.to(`order_${order._id}`).emit('order_status_change', payload);
+      if (order.order_number) {
+        io.to(`order_${order.order_number}`).emit('order_status_change', payload);
+      }
+    }
+
+    res.json({
+      id: order._id,
+      status: order.status,
+      payment_status: order.payment_status,
+      message: 'Payment settled successfully'
+    });
+  } catch (err) {
+    console.error('Settle payment error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   POST /api/orders/delivery/webhook
+// @desc    Receive live delivery status updates from Shadowfax (Public)
+// @access  Public
+router.post('/delivery/webhook', async (req, res) => {
+  try {
+    const { client_order_number, sfx_order_id, status, rider_details } = req.body;
+
+    const order = await Order.findOne({ 
+      $or: [
+        { order_number: client_order_number },
+        { delivery_job_id: sfx_order_id }
+      ]
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Map Shadowfax status to our local delivery/order states
+    if (status) {
+      order.delivery_status = status; // e.g. 'at_store', 'out_for_delivery', 'delivered'
+      if (status === 'out_for_delivery') {
+        order.status = 'out_for_delivery';
+      } else if (status === 'delivered') {
+        order.status = 'delivered';
+        order.payment_status = 'paid'; // delivery confirmed
+      }
+    }
+
+    if (rider_details) {
+      if (rider_details.name) order.delivery_rider_name = rider_details.name;
+      if (rider_details.phone) order.delivery_rider_phone = rider_details.phone;
+    }
+
+    await order.save();
+
+    // Broadcast update via Socket.IO
+    const io = req.app.get('socketio');
+    if (io) {
+      const payload = {
+        id: order.order_number || order._id,
+        _id: order._id,
+        order_number: order.order_number,
+        status: order.status,
+        payment_status: order.payment_status,
+        delivery_status: order.delivery_status,
+        delivery_rider_name: order.delivery_rider_name,
+        delivery_rider_phone: order.delivery_rider_phone,
+        updated_at: order.updated_at
+      };
+      io.emit('order_status_updated', payload);
+      io.to(`order_${order._id}`).emit('order_status_change', payload);
+      if (order.order_number) {
+        io.to(`order_${order.order_number}`).emit('order_status_change', payload);
+      }
+    }
+
+    res.json({ success: true, message: 'Status updated successfully' });
+  } catch (err) {
+    console.error('Shadowfax webhook processing error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   POST /api/orders/delivery/partner-updates
+// @route   POST /api/orders/webhooks/shiprocket
+// @desc    Receive live delivery status updates from Shiprocket (Public / Hyperlocal)
+// @access  Public
+router.post(['/delivery/partner-updates', '/webhooks/shiprocket'], async (req, res) => {
+  try {
+    const { 
+      order_id, 
+      order_reference_id,
+      current_status, 
+      status,
+      awb, 
+      courier_name, 
+      rider_name, 
+      rider_phone,
+      rider_details
+    } = req.body;
+
+    const refId = order_reference_id || order_id;
+    const finalStatus = status || current_status;
+    const finalRiderName = rider_name || (rider_details && rider_details.name) || courier_name;
+    const finalRiderPhone = rider_phone || (rider_details && rider_details.phone);
+
+    const order = await Order.findOne({ 
+      $or: [
+        { order_number: refId },
+        { delivery_job_id: awb }
+      ]
+    });
+
+    if (!order) {
+      return res.status(200).json({ success: true, message: 'Order not found (ignored for verification)' });
+    }
+
+    if (finalStatus) {
+      order.delivery_status = finalStatus;
+      
+      const statusLower = finalStatus.toLowerCase();
+      if (statusLower.includes('out for delivery') || statusLower.includes('picked_up') || statusLower.includes('picked up')) {
+        order.status = 'out_for_delivery';
+      } else if (statusLower.includes('delivered')) {
+        order.status = 'delivered';
+        order.payment_status = 'paid';
+      } else if (statusLower.includes('cancelled')) {
+        order.status = 'cancelled';
+      }
+    }
+
+    if (finalRiderName) {
+      order.delivery_rider_name = finalRiderName;
+    }
+    if (finalRiderPhone) {
+      order.delivery_rider_phone = finalRiderPhone;
+    }
+
+    await order.save();
+
+    // Broadcast socket update
+    const io = req.app.get('socketio');
+    if (io) {
+      broadcastOrderStatus(order, io);
+    }
+
+    res.json({ success: true, message: 'Shiprocket status updated successfully' });
+  } catch (err) {
+    console.error('Shiprocket webhook processing error:', err.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+/**
+ * Broadcasts order status changes to connected Socket.IO clients
+ */
+function broadcastOrderStatus(order, io) {
+  if (!io) return;
+  const payload = {
+    id: order.order_number || order._id,
+    _id: order._id,
+    order_number: order.order_number,
+    status: order.status,
+    payment_status: order.payment_status,
+    delivery_job_id: order.delivery_job_id,
+    delivery_status: order.delivery_status,
+    delivery_rider_name: order.delivery_rider_name,
+    delivery_rider_phone: order.delivery_rider_phone,
+    pickup_otp: order.pickup_otp,
+    delivery_otp: order.delivery_otp,
+    pickup_tracking_url: order.pickup_tracking_url,
+    delivery_tracking_url: order.delivery_tracking_url,
+    updated_at: order.updated_at
+  };
+  io.emit('order_status_updated', payload);
+  io.to(`order_${order._id}`).emit('order_status_change', payload);
+  if (order.order_number) {
+    io.to(`order_${order.order_number}`).emit('order_status_change', payload);
+  }
+}
+
+// In-memory ring buffer for recent Borzo webhook logs
+const borzoWebhookLogs = [];
+
+function recordBorzoWebhookLog(type, payload, status, message) {
+  borzoWebhookLogs.unshift({
+    id: 'log_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+    timestamp: new Date().toISOString(),
+    type,
+    payload,
+    status,
+    message
+  });
+  if (borzoWebhookLogs.length > 50) {
+    borzoWebhookLogs.pop();
+  }
+}
+
+// @route   GET /api/orders/webhook/borzo/logs
+// @desc    Get recent Borzo webhook events & diagnostic logs
+// @access  Private (Admin/Staff)
+router.get('/webhook/borzo/logs', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
+  res.json({
+    total: borzoWebhookLogs.length,
+    webhook_url: `${req.protocol}://${req.get('host')}/api/orders/webhook/borzo`,
+    logs: borzoWebhookLogs
+  });
+});
+
+// @route   POST /api/orders/webhook/borzo/test
+// @desc    Simulate and test Borzo webhook connectivity
+// @access  Private (Admin/Staff)
+router.post('/webhook/borzo/test', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
+  const testPayload = {
+    event_type: 'order_status_changed',
+    order: {
+      order_id: 'TEST-' + Math.floor(100000 + Math.random() * 900000),
+      status: 'active',
+      client_order_id: 'ORD-TEST-SAMPLE',
+      courier: {
+        name: 'Suresh Kumar',
+        phone: '+919876543210'
+      }
+    }
+  };
+
+  recordBorzoWebhookLog('TEST_PING', testPayload, 'success', 'Webhook test ping validated successfully');
+
+  res.json({
+    success: true,
+    message: 'Borzo webhook test ping processed successfully',
+    timestamp: new Date().toISOString(),
+    endpoint: `${req.protocol}://${req.get('host')}/api/orders/webhook/borzo`,
+    sample_payload: testPayload
+  });
+});
+
+// @route   POST /api/orders/webhook/borzo
+// @desc    Receive real-time delivery callbacks & rider status updates from Borzo
+router.post('/webhook/borzo', async (req, res) => {
+  try {
+    const data = req.body || {};
+    console.log('[Borzo Webhook] Received callback event:', JSON.stringify(data));
+
+    const orderData = data.order || data;
+    const borzoOrderId = orderData.order_id;
+    const clientOrderId = orderData.client_order_id || (orderData.points && orderData.points[0]?.client_order_id);
+    const status = (orderData.status || '').toLowerCase();
+    const courier = orderData.courier || {};
+
+    recordBorzoWebhookLog('CALLBACK_RECEIVED', data, 'received', `Event received for ${borzoOrderId || clientOrderId || 'unknown'}`);
+
+    const query = [];
+    if (borzoOrderId) {
+      query.push({ delivery_job_id: `BRZ-${borzoOrderId}` });
+      query.push({ delivery_job_id: String(borzoOrderId) });
+    }
+    if (clientOrderId) {
+      query.push({ order_number: clientOrderId });
+    }
+
+    if (query.length === 0) {
+      return res.status(200).json({ is_successful: true, message: 'No match criteria found' });
+    }
+
+    const order = await Order.findOne({ $or: query });
+    if (!order) {
+      console.warn('[Borzo Webhook] Order not matched for:', borzoOrderId || clientOrderId);
+      return res.status(200).json({ is_successful: true, message: 'Order not found' });
+    }
+
+    // Map Borzo order statuses to application status model
+    // Borzo statuses: new, available, active, completed, canceled, delayed
+    if (status) {
+      order.delivery_status = status;
+
+      if (['active'].includes(status)) {
+        if (order.status !== 'out_for_delivery') {
+          order.status = 'out_for_delivery';
+        }
+      } else if (['completed'].includes(status)) {
+        order.status = 'delivered';
+        order.payment_status = 'paid';
+      } else if (['canceled'].includes(status)) {
+        order.delivery_status = 'cancelled';
+      }
+    }
+
+    if (courier.name) {
+      const courierFullName = [courier.name, courier.surname].filter(Boolean).join(' ');
+      order.delivery_rider_name = courierFullName || 'Borzo Rider';
+    }
+    if (courier.phone) {
+      order.delivery_rider_phone = courier.phone;
+    }
+
+    if (orderData.points && Array.isArray(orderData.points)) {
+      if (orderData.points[0]?.tracking_url) {
+        order.pickup_tracking_url = orderData.points[0].tracking_url;
+      }
+      if (orderData.points[1]?.tracking_url) {
+        order.delivery_tracking_url = orderData.points[1].tracking_url;
+      }
+    }
+
+    await order.save();
+
+    recordBorzoWebhookLog('PROCESSED_SUCCESS', data, 'success', `Updated order #${order.order_number} to status: ${order.delivery_status}`);
+
+    const io = req.app.get('socketio');
+    if (io) {
+      broadcastOrderStatus(order, io);
+    }
+
+    res.status(200).json({ is_successful: true });
+  } catch (err) {
+    console.error('[Borzo Webhook Error]:', err.message);
+    recordBorzoWebhookLog('ERROR', req.body, 'error', err.message);
+    res.status(200).json({ is_successful: false, error: err.message });
+  }
+});
+
+// @route   POST /api/orders/webhook/shadowfax
+// @desc    Receive real-time delivery status updates from Shadowfax Webhook / Push Callback API
+router.post('/webhook/shadowfax', async (req, res) => {
+  try {
+    const { 
+      awb_number, order_id, request_id, client_order_id, 
+      status, event, rider_name, rider_contact, rider_details, location 
+    } = req.body;
+    console.log('[Shadowfax Webhook] Received update payload:', req.body);
+
+    const targetOrderNumber = order_id || client_order_id;
+    const targetAwb = awb_number || request_id;
+
+    const lookupConditions = [];
+    if (targetOrderNumber) lookupConditions.push({ order_number: targetOrderNumber });
+    if (targetAwb) lookupConditions.push({ delivery_job_id: targetAwb });
+
+    if (lookupConditions.length === 0) {
+      return res.status(200).json({ message: 'No identifier found, acknowledged' });
+    }
+
+    const order = await Order.findOne({ $or: lookupConditions });
+    if (!order) {
+      console.warn('[Shadowfax Webhook] Order not found for:', req.body);
+      return res.status(200).json({ message: 'Order not found, acknowledged' });
+    }
+
+    const currentStatus = (event || status || '').toLowerCase();
+    if (currentStatus) {
+      order.delivery_status = currentStatus;
+      if (['picked', 'ofp', 'ofd', 'out_for_delivery', 'assigned_for_delivery'].includes(currentStatus)) {
+        order.status = 'out_for_delivery';
+      } else if (currentStatus === 'delivered') {
+        order.status = 'delivered';
+        order.payment_status = 'paid';
+      } else if (['cancelled', 'cancelled_by_customer'].includes(currentStatus)) {
+        order.delivery_status = 'cancelled';
+      }
+    }
+
+    // Map Rider Details
+    const name = rider_name || rider_details?.name;
+    const phone = rider_contact || rider_details?.phone;
+    if (name) order.delivery_rider_name = name;
+    if (phone) order.delivery_rider_phone = phone;
+
+    await order.save();
+
+    const io = req.app.get('socketio');
+    if (io) {
+      broadcastOrderStatus(order, io);
+    }
+
+    res.status(200).json({ message: 'Webhook processed successfully' });
+  } catch (err) {
+    console.error('[Shadowfax Webhook] Processing error:', err.message);
+    res.status(200).json({ message: 'Error acknowledged' });
+  }
+});
+
+module.exports = router;

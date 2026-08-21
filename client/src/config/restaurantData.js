@@ -1,0 +1,264 @@
+/**
+ * Single Centralized Data Configuration for Order By Bulk
+ * All restaurant details, awards, testimonials, media, GMB info, and social links are defined here.
+ * Edit this file anytime to customize or update the website content.
+ */
+
+export const restaurantData = {
+  // Core Brand Identity
+  name: "Order By Bulk",
+  subTitle: "Chat Bhandar",
+  tagline: "Experience the Authentic Taste of Original Chat",
+  description: "Experience the vibrant culinary heritage of authentic street food in Hyderabad. From crispy Pani Puris and royal Raj Kachori to sizzling Amul Butter Pav Bhaji, every dish is prepared fresh with 100% pure vegetarian passion.",
+  establishedYear: "2015",
+  isPureVeg: true,
+  currency: "₹",
+  domain: "bombaychowpati.com",
+  siteUrl: "https://bombaychowpati.com",
+  footerText: "Order By Bulk - Chat Bhandar. 100% Pure Veg. All rights reserved.",
+  developerCompany: "Notelia Private Limited",
+  developerUrl: "https://company.notelia.com",
+
+  // GMB & Store Contact Information
+  gmbAddress: "Order By Bulk, Pahade Corner, Gajanan Nagar, Garkheda, Chhatrapati Sambhajinagar, Maharashtra 431009",
+  gmbLandmark: "Pahade Corner, Gajanan Nagar",
+  gmbLink: "https://maps.app.goo.gl/axxUm4PMjos2yPiS6",
+  googleMapsEmbedUrl: "https://maps.google.com/maps?q=19.8572957,75.3561952&t=&z=16&ie=UTF8&iwloc=&output=embed",
+  supportPhone: "9595989849",
+  formattedPhone: "+91 9595989849",
+  whatsappNumber: "919595989849",
+  email: "orderbybulk@gmail.com",
+  operatingHours: "Pre Order: 24×7 | For Regular Order: 06:00 AM To 11:00 PM",
+
+  // Social Links & Profiles
+  instagramUrl: "https://www.instagram.com/bombay_chowpati_?utm_source=qr&igsh=ZTQ0azZ3cWkxd21r",
+  instagramHandle: "@bombay_chowpati_",
+  instagramFollowers: "25K+",
+  beholdFeedUrl: "", // Add your behold.so JSON Feed URL here to fetch live posts automatically
+
+  // Payment Details
+  upiId: "7207836300@okbizaxis",
+  payeeName: "Order By Bulk Chat Bhandar",
+  deliveryFee: 45,
+  freeDeliveryThreshold: 399,
+
+  // Hero Video & Background Media Assets
+  hero: {
+    videoUrl: "/vid1.mp4",
+    fallbackImage: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=1600",
+    badgeText: "100% Pure Vegetarian Culinary Art",
+    titleLine1: "Experience the",
+    titleLine2: "Authentic Taste of Original Chat",
+    subtitle: "From crispy puris to sizzling pav bhaji, enjoy the true authentic taste of original chat every day."
+  },
+
+  // Restaurant Key Milestones & Stats
+  stats: [
+    { label: "Happy Foodies Served", value: "500,000+" },
+    { label: "Signature Pure Veg Dishes", value: "50+" },
+    { label: "Google Review Rating", value: "4.8 ★" },
+    { label: "Years of Culinary Excellence", value: "10+ Years" }
+  ],
+
+  awards: [
+    {
+      id: 1,
+      title: "Pride of Southern India Awards 2026",
+      year: "2026",
+      organization: "Best Chat Bhandar of the Year",
+      description: "Honoured with the 'Best Chat Bhandar of the Year' award at the Pride of Southern India Awards 2026. The award was presented by legendary Bollywood Actress and former Member of Rajya Sabha, Jaya Prada, at The Park Hyderabad.",
+      icon: "Trophy",
+      images: [
+        "/awards/img4.jpeg",
+        "/awards/img6.jpeg",
+        "/awards/img1.jpg"
+      ]
+    },
+    {
+      id: 2,
+      title: "Pride India Awards 2026",
+      year: "2026",
+      organization: "Indian Iconic Chat Bhandar of the Year",
+      description: "Awarded the Certificate of Excellence as the Indian Iconic Chat Bhandar of the Year 2026, celebrating outstanding quality, hygiene, and authenticity in street food.",
+      icon: "Award",
+      images: [
+        "/awards/img2.jpg"
+      ]
+    },
+    {
+      id: 3,
+      title: "Pride India Awards 2025",
+      year: "2025",
+      organization: "Indian Iconic Chat Bhandar of the Year",
+      description: "Winner of the Indian Iconic Chat Bhandar of the Year 2025 at the Pride India & Business Awards. Certificate of Excellence proudly presented to Order By Bulk.",
+      icon: "Star",
+      images: [
+        "/awards/img5.jpeg",
+        "/awards/img3.jpg"
+      ]
+    }
+  ],
+
+  // Live Party & Catering Packages
+  cateringPackages: [
+    {
+      id: 1,
+      title: "Live Pani Puri & Chat Counter",
+      subtitle: "Interactive Live Setup",
+      description: "Hygienic Mineral Water Pani Puri, Ragda Chat, Dahi Puri, and Bhel Puri prepared fresh live for your guests.",
+      badge: "Most Popular",
+      items: ["Mineral Water Pani Puri", "Special Sev Puri", "Dahi Puri", "Bhel Puri", "Special Ragda Chat"]
+    },
+    {
+      id: 2,
+      title: "Sizzling Tawa Pav Bhaji & Choley Kulchey",
+      subtitle: "Hot Butter Feast",
+      description: "Live hot Tawa Pav Bhaji & Choley Kulchey cooked in butter & ghee with special spices, served with soft roasted Pav & Kulchey, fresh lemon, and chopped onions.",
+      badge: "Chef Special",
+      items: ["Special Butter Pav Bhaji", "Cheese Pav Bhaji", "Masala Pav Bhaji", "Choley Kulchey with Tomato Achar"]
+    },
+    {
+      id: 3,
+      title: "Royal Raj Kachori & Sweets",
+      subtitle: "Grand Wedding Station",
+      description: "Crispy Royal Raj Kachoris filled with sprouts, sweet curd, pomegranate, topped with Gulab Jamun & Malai Kulfi.",
+      badge: "Luxury Catering",
+      items: ["Royal Raj Kachori", "Dahi Bhalla Stuffed", "Dry Fruit Sweet Lassi", "Hot Gulab Jamun", "Malai Kulfi Stick"]
+    }
+  ],
+
+  // Playable Instagram Reels Video Showcase
+  instagramReels: [
+    {
+      id: 1,
+      videoUrl: "/reels/reel1.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    },
+    {
+      id: 2,
+      videoUrl: "/reels/reel2.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    },
+    {
+      id: 3,
+      videoUrl: "/reels/reel3.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    },
+    {
+      id: 4,
+      videoUrl: "/reels/reel4.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    },
+    {
+      id: 5,
+      videoUrl: "/reels/reel5.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    },
+    {
+      id: 6,
+      videoUrl: "/reels/reel6.mp4",
+      reelUrl: "https://www.instagram.com/bombay_chowpati_?igsh=MWFwYjZxanp3andvdQ=="
+    }
+  ],
+
+  // Instagram Feed Showcase Posts
+  instagramPosts: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=600",
+      caption: "Crispy Pani Puri loaded with cold spiced mint water! Tag your pani puri lover friend 😍 #PaniPuri #BombayChowpati",
+      likes: "2.4K",
+      comments: "142"
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=600",
+      caption: "Sizzling Special Amul Butter Pav Bhaji served hot! Extra pav is mandatory 🧈🍞 #PavBhaji #StreetFood",
+      likes: "3.8K",
+      comments: "210"
+    },
+    {
+      id: 3,
+      image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600",
+      caption: "Royal Raj Kachori stuffed with sweet curd, pomegranate, and crunchy sev! 👑 #RajKachori #PureVeg",
+      likes: "1.9K",
+      comments: "98"
+    },
+    {
+      id: 4,
+      image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600",
+      caption: "Chilled Sweet Mango Lassi topped with saffron and sliced almonds! Perfect refresher 🥭 #Lassi #Dessert",
+      likes: "2.1K",
+      comments: "85"
+    }
+  ],
+
+  // Customer Reviews & Testimonials
+  testimonials: [
+    {
+      id: 1,
+      name: "Aarav Sharma",
+      role: "Food Blogger & Local Guide",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+      rating: 5,
+      comment: "Undoubtedly the BEST Pani Puri and Amul Butter Pav Bhaji in Hyderabad! The taste takes you straight to Chowpati beach in Mumbai. Clean, fast service, and 100% pure veg."
+    },
+    {
+      id: 2,
+      name: "Ananya Reddy",
+      role: "Event Planner",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+      rating: 5,
+      comment: "We booked Order By Bulk's live chaat counter for our wedding reception. Guests could not stop raving about the Raj Kachori and Sev Puri. Outstanding quality and management!"
+    },
+    {
+      id: 3,
+      name: "Vikram Singh",
+      role: "Regular Guest",
+      avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150",
+      rating: 5,
+      comment: "Authentic Mumbai flavors right in Abids! Their Dahi Bhalla and Choley Kulchey are unmatchable. The staff is polite and hygiene standards are top-notch."
+    },
+    {
+      id: 4,
+      name: "Sneha Kulkarni",
+      role: "Software Engineer",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150",
+      rating: 5,
+      comment: "Love their online order scheduling feature! I order my evening snacks before leaving office and pick up hot fresh Pav Bhaji on my way home."
+    },
+    {
+      id: 5,
+      name: "Rajesh Varma",
+      role: "Corporate Lead",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+      rating: 5,
+      comment: "The live Pav Bhaji tawa setup at our office annual party was a massive hit. Professional team, pristine hygiene, and incredible taste!"
+    },
+    {
+      id: 6,
+      name: "Pooja Agarwal",
+      role: "Food Enthusiast",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      rating: 5,
+      comment: "Best pure veg chaat in Abids hands down. The Pani Puri mint water is so refreshing and authentic. Highly recommended for families!"
+    }
+  ],
+
+  // Footer Navigation Sections
+  footerSections: {
+    quickLinks: [
+      { name: "Digital Menu Catalog", path: "/menu" },
+      { name: "Party & Catering Inquiry", path: "/#catering" },
+      { name: "Customer Sign In", path: "/account" },
+      { name: "Staff & Admin Portal", path: "/admin/login" }
+    ],
+    topSpecialties: [
+      { name: "Food", path: "/menu?service=FOOD" },
+      { name: "InstaMart", path: "/menu?service=INSTAMART" },
+      { name: "Dine-in", path: "/menu?service=DINE_IN" },
+      { name: "Mess & Tiffin Service", path: "/menu?service=MESS_TIFFIN" },
+      { name: "Catering", path: "/menu?service=CATERING" }
+    ]
+  }
+};

@@ -1,0 +1,625 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import { Users, UserPlus, Trash2, Key, ShieldCheck, Mail, Search, RefreshCw, X, Check, Shield, UserCheck, Edit } from 'lucide-react';
+import SkeletonLoader from '../components/SkeletonLoader';
+import PageHeader from '../components/PageHeader';
+import Pagination from '../components/Pagination';
+
+export default function UserManagement() {
+  const { token, user: currentUser } = useAuth();
+  const { addToast } = useToast();
+
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState('ALL');
+
+  // Form states
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('staff');
+  const [submitting, setSubmitting] = useState(false);
+
+  // Password change states
+  const [selectedUserForPassword, setSelectedUserForPassword] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordChanging, setPasswordChanging] = useState(false);
+
+  // Edit details states
+  const [selectedUserForEdit, setSelectedUserForEdit] = useState(null);
+  const [editUsername, setEditUsername] = useState('');
+  const [editRole, setEditRole] = useState('staff');
+  const [userUpdating, setUserUpdating] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/users`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok && Array.isArray(data)) {
+        setUsers(data);
+      } else {
+        setUsers([]);
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Failed to load user accounts.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [token]);
+
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ username, password, role })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        addToast(`User ${username} created successfully!`, 'success');
+        setUsername('');
+        setPassword('');
+        setRole('staff');
+        setShowAddForm(false);
+        fetchUsers();
+      } else {
+        addToast(data.message || 'Failed to create user', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Error creating user account', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleEditUser = async (e) => {
+    e.preventDefault();
+    if (!editUsername || !editUsername.trim()) {
+      addToast('Username is required', 'warning');
+      return;
+    }
+    setUserUpdating(true);
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/users/${selectedUserForEdit.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ username: editUsername, role: editRole })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        addToast('User details updated successfully!', 'success');
+        setSelectedUserForEdit(null);
+        setEditUsername('');
+        setEditRole('staff');
+        fetchUsers();
+      } else {
+        addToast(data.message || 'Failed to update user details', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Error updating user details', 'error');
+    } finally {
+      setUserUpdating(false);
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    if (!newPassword || newPassword.trim().length < 6) {
+      addToast('Password must be at least 6 characters long', 'warning');
+      return;
+    }
+    setPasswordChanging(true);
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/users/${selectedUserForPassword.id}/password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ password: newPassword })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        addToast(`Password for ${selectedUserForPassword.username} updated!`, 'success');
+        setNewPassword('');
+        setSelectedUserForPassword(null);
+      } else {
+        addToast(data.message || 'Failed to update password', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Network error while updating password', 'error');
+    } finally {
+      setPasswordChanging(false);
+    }
+  };
+
+  const handleDeleteUser = async (id, uname) => {
+    if (!window.confirm(`Are you sure you want to remove user "${uname}"?`)) return;
+
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        addToast(`User ${uname} deleted`, 'info');
+        fetchUsers();
+      } else {
+        addToast(data.message || 'Failed to delete user', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Network error while deleting user', 'error');
+    }
+  };
+
+  const filteredUsers = users.filter(u => {
+    const query = searchQuery.toLowerCase();
+    const matchesQuery = u.username.toLowerCase().includes(query) || u.role.toLowerCase().includes(query);
+    const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
+    return matchesQuery && matchesRole;
+  });
+
+  const getRoleBadgeColor = (r) => {
+    switch (r) {
+      case 'admin':
+        return 'bg-[white] text-[#F15A25] border-[#F15A25]';
+      case 'kitchen':
+        return 'bg-[white] text-[#F15A25] border-[#F15A25]';
+      default:
+        return 'bg-neutral-50 text-[#141B20] border-[#141B20]';
+    }
+  };
+
+  if (loading) {
+    return <SkeletonLoader type="list" />;
+  }
+
+  return (
+    <div className="space-y-5 sm:space-y-8">
+      {/* Header Controls */}
+      <PageHeader
+        title="System Users Management"
+        description="Provision and audit credentials for cashier staff, kitchen helpers, and admins."
+        icon={Users}
+      >
+        <button
+          onClick={() => setShowAddForm(true)}
+          className="bg-[#141B20] hover:bg-[#141B20] text-[white] font-bold text-xs rounded-xl px-4 py-2.5 shadow-sm transition-all flex items-center gap-2 cursor-pointer border border-[white]/30 shrink-0"
+        >
+          <UserPlus className="w-4 h-4" />
+          <span>Add New User</span>
+        </button>
+      </PageHeader>
+
+      {/* KPI Metrics Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+            <Users className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <span className="text-[10px] sm:text-xs font-bold text-[#141B20] uppercase tracking-wider block leading-tight">Total Credentials</span>
+            <div className="text-lg sm:text-2xl font-black text-[#141B20] font-serif mt-0.5">{users.length}</div>
+          </div>
+        </div>
+
+        <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+            <Shield className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <span className="text-[10px] sm:text-xs font-bold text-[#141B20] uppercase tracking-wider block leading-tight">System Admins</span>
+            <div className="text-lg sm:text-2xl font-black text-[#141B20] font-serif mt-0.5">
+              {users.filter(u => u.role === 'admin').length}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+            <UserCheck className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <span className="text-[10px] sm:text-xs font-bold text-[#141B20] uppercase tracking-wider block leading-tight">Staff & Kitchen</span>
+            <div className="text-lg sm:text-2xl font-black text-[#141B20] font-serif mt-0.5">
+              {users.filter(u => u.role !== 'admin').length}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Single Unified Edge-to-Edge Table Panel Card Container */}
+      <div className="bg-[white] rounded-3xl border border-[#141B20] shadow-xs overflow-hidden">
+        {/* Control Bar Header with Padding */}
+        <div className="p-4 sm:p-5 border-b border-[#141B20]">
+          <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <div className="relative flex-1 w-full">
+              <Search className="w-4 h-4 text-[#141B20] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search users by username or role..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[white]/30 border border-[#141B20] rounded-2xl pl-10 pr-4 py-2.5 text-xs text-[#141B20] placeholder-gray-400 focus:outline-none focus:border-[white] focus:ring-1 focus:ring-[white]/30"
+              />
+            </div>
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="bg-[white] border border-[#141B20] text-[#141B20] px-3 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-[white] cursor-pointer w-full sm:w-auto"
+            >
+              <option value="ALL">All Roles</option>
+              <option value="admin">Administrator</option>
+              <option value="staff">Counter Staff</option>
+              <option value="kitchen">Kitchen Operator</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Users List edge-to-edge Table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-[480px] w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[white] border-b border-[#141B20] text-[10px] font-black uppercase text-[#141B20] tracking-wider">
+                <th className="py-3.5 px-4 sm:px-6">System User</th>
+                <th className="py-3.5 px-4 sm:px-6">Role</th>
+                <th className="py-3.5 px-4 sm:px-6 hidden sm:table-cell">Created On</th>
+                <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#141B20] text-xs text-[#141B20] font-semibold">
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="py-12 text-center text-[#141B20] font-bold">
+                    No system users matching search criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers
+                  .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                  .map((u) => (
+                  <tr key={u.id} className="hover:bg-[white]/20 transition-colors">
+                    <td className="py-4 px-4 sm:px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-[#141B20]/10 border border-[#141B20]/20 flex items-center justify-center text-[#141B20] font-black uppercase text-xs">
+                          {u.username[0]}
+                        </div>
+                        <div>
+                          <span className="font-serif font-black text-sm text-[#141B20] block">{u.username}</span>
+                          {u.id === currentUser.id && (
+                            <span className="text-[9px] text-[#F15A25] font-extrabold uppercase bg-[white] border border-[#F15A25] px-1.5 py-0.5 rounded mt-0.5 inline-block">
+                              Active Session
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 sm:px-6">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${getRoleBadgeColor(u.role)}`}>
+                        {u.role}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 sm:px-6 text-[#141B20] font-light">
+                      {new Date(u.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </td>
+                    <td className="py-4 px-4 sm:px-6 text-right space-x-1">
+                      <button
+                        onClick={() => {
+                          setSelectedUserForEdit(u);
+                          setEditUsername(u.username);
+                          setEditRole(u.role);
+                        }}
+                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
+                        title="Edit user details"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setSelectedUserForPassword(u)}
+                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
+                        title="Change user password"
+                      >
+                        <Key className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(u.id, u.username)}
+                        disabled={u.id === currentUser.id}
+                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer disabled:opacity-30 disabled:hover:bg-transparent inline-block"
+                        title={u.id === currentUser.id ? "Cannot delete active session" : "Delete system user"}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Footer with Padding */}
+        <div className="px-4 sm:px-6 py-3.5 border-t border-[#141B20] bg-[white]">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(filteredUsers.length / pageSize)}
+            totalItems={filteredUsers.length}
+            pageSize={pageSize}
+            onPageChange={(p) => setCurrentPage(p)}
+            pageSizeOptions={[5, 10, 20, 50]}
+            onPageSizeChange={(s) => { setPageSize(s); setCurrentPage(1); }}
+          />
+        </div>
+      </div>
+
+      {/* Add User Modal */}
+      {showAddForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-[white] text-[#141B20] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-[white]/20 flex flex-col">
+            <div className="p-5 border-b border-[white]/20 flex justify-between items-center bg-[white] shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[white] border border-[white]/30 flex items-center justify-center text-[#141B20]">
+                  <UserPlus className="w-4.5 h-4.5" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-black text-base text-[#141B20]">Add System User</h3>
+                  <span className="text-[10px] text-[#141B20] uppercase tracking-wider font-extrabold block">Provision new login</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowAddForm(false)} 
+                className="w-8 h-8 rounded-full bg-[white] flex items-center justify-center hover:bg-[white] transition-colors text-[#141B20] cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddUser} className="p-6 space-y-4">
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  Username *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. cashier_chowpati"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] placeholder-gray-400 focus:outline-none focus:border-[white]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="Enter strong password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] placeholder-gray-400 focus:outline-none focus:border-[white]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  Access Role *
+                </label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] focus:outline-none focus:border-[white]"
+                >
+                  <option value="staff">Staff (Cashier / Counter)</option>
+                  <option value="kitchen">Kitchen Screen Operator</option>
+                  <option value="admin">System Administrator</option>
+                </select>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowAddForm(false)}
+                  className="flex-1 bg-[white] border border-[#141B20] hover:bg-[white] text-[#141B20] py-3 rounded-xl transition-all cursor-pointer font-bold text-xs uppercase"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex-1 bg-[#141B20] hover:bg-[#141B20] text-[white] py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer font-black text-xs uppercase tracking-wider disabled:opacity-50"
+                >
+                  <Check className="w-4 h-4" />
+                  {submitting ? 'Creating...' : 'Create User'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Change Password Modal */}
+      {selectedUserForPassword && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-[white] text-[#141B20] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-[white]/20 flex flex-col">
+            <div className="p-5 border-b border-[white]/20 flex justify-between items-center bg-[white] shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[white] border border-[white]/30 flex items-center justify-center text-[#141B20]">
+                  <Key className="w-4.5 h-4.5" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-black text-base text-[#141B20]">Change Password</h3>
+                  <span className="text-[10px] text-[#141B20] uppercase tracking-wider font-extrabold block">User: {selectedUserForPassword.username}</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setSelectedUserForPassword(null);
+                  setNewPassword('');
+                }} 
+                className="w-8 h-8 rounded-full bg-[white] flex items-center justify-center hover:bg-[white] transition-colors text-[#141B20] cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleChangePassword} className="p-6 space-y-4">
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  New Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="Enter at least 6 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] placeholder-gray-400 focus:outline-none focus:border-[white]"
+                />
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedUserForPassword(null);
+                    setNewPassword('');
+                  }}
+                  className="flex-1 bg-[white] border border-[#141B20] hover:bg-[white] text-[#141B20] py-3 rounded-xl transition-all cursor-pointer font-bold text-xs uppercase"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={passwordChanging}
+                  className="flex-1 bg-[#141B20] hover:bg-[#141B20] text-[white] py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer font-black text-xs uppercase tracking-wider disabled:opacity-50"
+                >
+                  <Check className="w-4 h-4" />
+                  {passwordChanging ? 'Updating...' : 'Update Password'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Edit User Modal */}
+      {selectedUserForEdit && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-[white] text-[#141B20] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-[white]/20 flex flex-col">
+            <div className="p-5 border-b border-[white]/20 flex justify-between items-center bg-[white] shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[white] border border-[white]/30 flex items-center justify-center text-[#141B20]">
+                  <Edit className="w-4.5 h-4.5" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-black text-base text-[#141B20]">Edit User Details</h3>
+                  <span className="text-[10px] text-[#141B20] uppercase tracking-wider font-extrabold block">User ID: {selectedUserForEdit.id}</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => {
+                  setSelectedUserForEdit(null);
+                  setEditUsername('');
+                  setEditRole('staff');
+                }} 
+                className="w-8 h-8 rounded-full bg-[white] flex items-center justify-center hover:bg-[white] transition-colors text-[#141B20] cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditUser} className="p-6 space-y-4">
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  Username *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Enter new username"
+                  value={editUsername}
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] placeholder-gray-400 focus:outline-none focus:border-[white]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
+                  Access Role *
+                </label>
+                <select
+                  value={editRole}
+                  onChange={(e) => setEditRole(e.target.value)}
+                  disabled={selectedUserForEdit.id === currentUser.id}
+                  className="w-full bg-[white] border border-[#141B20] rounded-xl px-4 py-2.5 text-xs text-[#141B20] focus:outline-none focus:border-[white] disabled:opacity-55"
+                >
+                  <option value="staff">Staff (Cashier / Counter)</option>
+                  <option value="kitchen">Kitchen Screen Operator</option>
+                  <option value="admin">System Administrator</option>
+                </select>
+                {selectedUserForEdit.id === currentUser.id && (
+                  <span className="text-[10px] text-[#F15A25] block mt-1">Cannot change your own administrative role.</span>
+                )}
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedUserForEdit(null);
+                    setEditUsername('');
+                    setEditRole('staff');
+                  }}
+                  className="flex-1 bg-[white] border border-[#141B20] hover:bg-[white] text-[#141B20] py-3 rounded-xl transition-all cursor-pointer font-bold text-xs uppercase"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={userUpdating}
+                  className="flex-1 bg-[#141B20] hover:bg-[#141B20] text-[white] py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer font-black text-xs uppercase tracking-wider disabled:opacity-50"
+                >
+                  <Check className="w-4 h-4" />
+                  {userUpdating ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
