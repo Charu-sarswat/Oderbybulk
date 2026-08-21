@@ -23,7 +23,7 @@ export const CustomerUIProvider = ({ children }) => {
 
   // Cart Functions
   const addToCart = (item, quantity = 1, selectedVariant = null, selectedAddons = [], customNotes = '', service = null) => {
-    const itemService = item.service_type || service || 'FOOD';
+    const itemService = service || (item.service_types && item.service_types[0]) || item.service_type || 'FOOD';
     if (cart.length > 0 && cartService && cartService !== itemService) {
       return { error: 'MIXED_CART', currentService: cartService, attemptedService: itemService };
     }

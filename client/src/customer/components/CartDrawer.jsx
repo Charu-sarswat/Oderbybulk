@@ -162,7 +162,7 @@ export default function CartDrawer({
       payment_method: paymentMethod,
       payment_utr: utrData?.utr || '',
       notes: orderNotes,
-      service_type: cartService || (cart[0] && cart[0].service_types && cart[0].service_types.length > 0 ? cart[0].service_types[0] : 'FOOD'),
+      service_type: cartService || 'FOOD',
       scheduled_time: orderTimeType === 'scheduled' && scheduledDate && scheduledTime ? `${scheduledDate}T${scheduledTime}:00` : null,
       items: cart.map(item => ({
         menu_item_id: item.menu_item_id || item.id,
@@ -302,9 +302,10 @@ export default function CartDrawer({
       
       // Must belong to the exact same menu (service) as the cart
       if (cartService) {
-        return item.service_types && item.service_types.length > 0 ? item.service_types.includes(cartService) : item.service_type === cartService;
+        return item.service_types ? item.service_types.includes(cartService) : item.service_type === cartService;
       }
-      return item.service_types && item.service_types.length > 0 ? item.service_types.includes(currentService) : item.service_type === currentService;
+      // If no cart service, use current context service
+      return item.service_types ? item.service_types.includes(currentService) : item.service_type === currentService;
     })
     .slice(0, 3);
 
@@ -455,12 +456,16 @@ export default function CartDrawer({
                               <p className="text-[10px] text-[#691F1A] font-black">{restaurantConfig.currency}{parseFloat(item.price).toFixed(0)}</p>
                             </div>
                           </div>
-                          {(!cartService || (item.service_types && item.service_types.length > 0 ? item.service_types.includes(cartService) : cartService === item.service_type)) && (
-                            <button
-                              onClick={() => addToCart(item, 1)}
-                              className="bg-[#FFF9EE] hover:bg-[#FFF3D6] text-[#691F1A] text-[10px] font-black px-3 py-1.5 rounded-lg border border-[white]/30 transition-all cursor-pointer"
-                             className="text-[#F15A25] font-bold">+ Add</button>
-                          )}
+                          <div className="flex items-center justify-between mt-2">
+                            {(!cartService || (item.service_types ? item.service_types.includes(cartService) : cartService === item.service_type)) && (
+                              <button
+                                onClick={() => addToCart(item, 1)}
+                                className="bg-[#FFF9EE] hover:bg-[#FFF3D6] text-[#691F1A] text-[10px] font-black px-3 py-1.5 rounded-lg border border-[white]/30 transition-all cursor-pointer"
+                              >
+                                + Add
+                              </button>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>

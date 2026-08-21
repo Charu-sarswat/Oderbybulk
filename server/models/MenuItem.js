@@ -32,15 +32,15 @@ const menuItemSchema = new mongoose.Schema({
     raw_material_id: { type: mongoose.Schema.Types.ObjectId, ref: 'RawMaterial' },
     quantity_required: { type: Number, required: true }
   }],
+  service_types: [{ 
+    type: String, 
+    enum: ['FOOD', 'INSTAMART', 'DINE_IN', 'MESS_TIFFIN', 'CATERING']
+  }],
   service_type: { 
     type: String, 
     enum: ['FOOD', 'INSTAMART', 'DINE_IN', 'MESS_TIFFIN', 'CATERING'],
     default: 'FOOD' 
   },
-  service_types: [{
-    type: String,
-    enum: ['FOOD', 'INSTAMART', 'DINE_IN', 'MESS_TIFFIN', 'CATERING']
-  }],
   created_at: { type: Date, default: Date.now }
 });
 

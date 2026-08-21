@@ -82,8 +82,8 @@ router.get('/categories', async (req, res) => {
           combo_items: i.combo_items,
           category_ids: i.category_ids || [],
           recipe: i.recipe || [],
-          service_type: i.service_type || 'FOOD',
-          service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD']
+          service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD'],
+          service_type: i.service_type || 'FOOD'
         }))
       };
     });
@@ -134,8 +134,8 @@ router.get('/items', async (req, res) => {
       combo_items: i.combo_items,
       category_ids: i.category_ids || [],
       recipe: i.recipe || [],
-      service_type: i.service_type || 'FOOD',
-      service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD']
+      service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD'],
+      service_type: i.service_type || 'FOOD'
     }));
     res.json(formatted);
   } catch (err) {
@@ -151,7 +151,7 @@ router.post('/items', auth, authorizeRoles('admin', 'staff'), async (req, res) =
     const { 
       category_id, name, description, price, delivery_price,
       image_url, image_urls, is_veg, is_featured, is_available, is_unlimited_stock, stock_quantity, variants, addons,
-      is_combo, combo_items, category_ids, recipe, service_type, service_types
+      is_combo, combo_items, category_ids, recipe, service_types, service_type
     } = req.body;
 
     if (!name || price === undefined) {
@@ -177,8 +177,8 @@ router.post('/items', auth, authorizeRoles('admin', 'staff'), async (req, res) =
       combo_items: combo_items || [],
       category_ids: category_ids || [],
       recipe: recipe || [],
-      service_type: (service_types && service_types.length > 0) ? service_types[0] : (service_type || 'FOOD'),
-      service_types: (service_types && service_types.length > 0) ? service_types : [service_type || 'FOOD']
+      service_types: service_types && service_types.length > 0 ? service_types : (service_type ? [service_type] : ['FOOD']),
+      service_type: service_types && service_types.length > 0 ? service_types[0] : (service_type || 'FOOD')
     });
 
     await newItem.save();
@@ -202,6 +202,10 @@ router.put('/items/:id', auth, authorizeRoles('admin', 'staff'), async (req, res
     if (updateData.delivery_price !== undefined) updateData.delivery_price = Number(updateData.delivery_price);
     if (updateData.is_featured !== undefined) updateData.is_featured = Boolean(updateData.is_featured);
 
+    if (updateData.service_types && updateData.service_types.length > 0) {
+      updateData.service_type = updateData.service_types[0];
+    }
+
     const updated = await MenuItem.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!updated) return res.status(404).json({ message: 'Menu item not found' });
 
@@ -219,8 +223,14 @@ router.put('/items/:id', auth, authorizeRoles('admin', 'staff'), async (req, res
 // @desc    Toggle item availability (Admin/Staff)
 router.put('/items/:id/availability', auth, authorizeRoles('admin', 'staff'), async (req, res) => {
   try {
-    const { is_available } = req.body;
-    const item = await MenuItem.findByIdAndUpdate(req.params.id, { is_available }, { new: true });
+    const updateData = { ...req.body };
+    
+    // Sync service type fallback if it's being updated
+    if (updateData.service_types && updateData.service_types.length > 0) {
+      updateData.service_type = updateData.service_types[0];
+    }
+    
+    const item = await MenuItem.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!item) return res.status(404).json({ message: 'Menu item not found' });
 
     res.json({ id: item._id, is_available: item.is_available });

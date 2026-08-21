@@ -81,7 +81,7 @@ export default function Menu() {
   }, []);
 
   const handleAddToCart = (item, quantity = 1, selectedVariant = null, selectedAddons = [], customNotes = '') => {
-    const itemService = (item.service_types && item.service_types.length > 0) ? item.service_types[0] : (item.service_type || currentService || 'FOOD');
+    const itemService = currentService || (item.service_types && item.service_types[0]) || item.service_type || 'FOOD';
     const result = addToCart(item, quantity, selectedVariant, selectedAddons, customNotes, itemService);
     if (result && result.error === 'MIXED_CART') {
       if (window.confirm(`Your cart contains ${result.currentService} items. To order from ${result.attemptedService}, please clear your current cart and switch service.`)) {
@@ -129,9 +129,7 @@ export default function Menu() {
     
     // We compute activeCategories below, but we need to derive the actual category first
     // Since we're in a render cycle, we'll just evaluate matchesService first
-    const matchesService = item.service_types && item.service_types.length > 0 
-      ? item.service_types.includes(currentService) 
-      : item.service_type === currentService;
+    const matchesService = item.service_types ? item.service_types.includes(currentService) : item.service_type === currentService;
     return matchesSearch && matchesService;
   }).sort((a, b) => {
     if (priceSort === 'low-to-high') return parseFloat(a.price) - parseFloat(b.price);
@@ -142,7 +140,7 @@ export default function Menu() {
   const activeCategories = categories.filter(cat => {
     const catId = (cat.id || cat._id).toString();
     return menuItems.some(item => 
-      (item.service_types && item.service_types.length > 0 ? item.service_types.includes(currentService) : item.service_type === currentService) && 
+      (item.service_types ? item.service_types.includes(currentService) : item.service_type === currentService) && 
       (
         (item.category_id && item.category_id.toString() === catId) ||
         (item.category_ids && item.category_ids.some(id => id && id.toString() === catId))
@@ -422,7 +420,7 @@ export default function Menu() {
                         <Plus className="w-3 h-3" />
                       </button>
                     </div>
-                  ) : (!cartService || (item.service_types && item.service_types.length > 0 ? item.service_types.includes(cartService) : cartService === item.service_type)) ? (
+                  ) : (!cartService || (item.service_types ? item.service_types.includes(cartService) : cartService === item.service_type)) ? (
                     <button
                       onClick={() => {
                         if ((item.variants && item.variants.length > 0) || (item.addons && item.addons.length > 0)) {

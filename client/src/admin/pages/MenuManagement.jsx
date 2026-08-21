@@ -66,6 +66,7 @@ export default function MenuManagement() {
   const [itemIsFeatured, setItemIsFeatured] = useState(false);
   const [isUnlimitedStock, setIsUnlimitedStock] = useState(false);
   const [itemServiceTypes, setItemServiceTypes] = useState(['FOOD']);
+  const [tempServiceType, setTempServiceType] = useState('FOOD');
 
   // Industry-Grade Combo & Multi-Category States
   const [isCombo, setIsCombo] = useState(false);
@@ -268,8 +269,8 @@ export default function MenuManagement() {
       variants: variants,
       addons: addons,
       recipe: recipe,
-      service_type: itemServiceTypes[0] || 'FOOD',
-      service_types: itemServiceTypes
+      service_types: itemServiceTypes,
+      service_type: itemServiceTypes[0] || 'FOOD'
     };
 
     try {
@@ -327,7 +328,7 @@ export default function MenuManagement() {
     setVariants(item.variants || []);
     setAddons(item.addons || []);
     setRecipe(item.recipe || []);
-    setItemServiceTypes(item.service_types && item.service_types.length > 0 ? item.service_types : (item.service_type ? [item.service_type] : ['FOOD']));
+    setItemServiceTypes(item.service_types?.length ? item.service_types : [item.service_type || 'FOOD']);
     setShowItemForm(true);
   };
 
@@ -357,6 +358,7 @@ export default function MenuManagement() {
     setTempRawId('');
     setTempRawQty('');
     setItemServiceTypes(['FOOD']);
+    setTempServiceType('FOOD');
     setShowItemForm(false);
   };
 
@@ -419,7 +421,8 @@ export default function MenuManagement() {
           is_veg: item.is_veg !== undefined ? item.is_veg : true,
           is_combo: item.is_combo,
           combo_items: item.combo_items,
-          category_ids: item.category_ids
+          category_ids: item.category_ids,
+          service_types: item.service_types
         })
       });
 
@@ -459,9 +462,7 @@ export default function MenuManagement() {
                        item.category_id === selectedCatFilter ||
                        (item.category_ids && item.category_ids.includes(selectedCatFilter));
                        
-    const matchesService = selectedServiceFilter === 'all' || 
-                           item.service_type === selectedServiceFilter ||
-                           (item.service_types && item.service_types.includes(selectedServiceFilter));
+    const matchesService = selectedServiceFilter === 'all' || (item.service_types ? item.service_types.includes(selectedServiceFilter) : item.service_type === selectedServiceFilter);
                        
     return matchesSearch && matchesCat && matchesService;
   });
@@ -901,28 +902,60 @@ export default function MenuManagement() {
                   
                   <div className="col-span-2">
                     <label className="text-[10px] font-bold text-[#141B20] uppercase block mb-1">Service Types</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-[white] p-3 rounded-xl border border-[#141B20]">
-                      {[
-                        { id: 'FOOD', label: 'Food' },
-                        { id: 'INSTAMART', label: 'InstaMart' },
-                        { id: 'DINE_IN', label: 'Dine-in' },
-                        { id: 'MESS_TIFFIN', label: 'Mess & Tiffin Service' },
-                        { id: 'CATERING', label: 'Catering' }
-                      ].map(svc => (
-                        <label key={svc.id} className="flex items-center gap-2 text-xs font-semibold text-[#141B20] select-none cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={itemServiceTypes.includes(svc.id)}
-                            onChange={() => {
-                              setItemServiceTypes(prev => 
-                                prev.includes(svc.id) ? prev.filter(id => id !== svc.id) : [...prev, svc.id]
-                              );
-                            }}
-                            className="w-4 h-4 text-gold-500 focus:ring-gold-500 border-[#141B20] rounded"
-                          />
-                          <span>{svc.label}</span>
-                        </label>
-                      ))}
+                    <div className="flex gap-2 mb-2">
+                      <select
+                        value={tempServiceType}
+                        onChange={(e) => setTempServiceType(e.target.value)}
+                        className="flex-1 text-xs p-2.5 border border-[#141B20] rounded-xl focus:outline-none focus:ring-1 focus:ring-gold-500 bg-[white]"
+                      >
+                        <option value="FOOD">Food</option>
+                        <option value="INSTAMART">InstaMart</option>
+                        <option value="DINE_IN">Dine-in</option>
+                        <option value="MESS_TIFFIN">Mess & Tiffin Service</option>
+                        <option value="CATERING">Catering</option>
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!itemServiceTypes.includes(tempServiceType)) {
+                            setItemServiceTypes([...itemServiceTypes, tempServiceType]);
+                          } else {
+                            addToast('Service type already added', 'warning');
+                          }
+                        }}
+                        className="bg-gold-500 hover:bg-gold-600 text-charcoal-900 font-bold px-4 rounded-xl text-xs cursor-pointer"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {itemServiceTypes.map(srv => {
+                        const srvLabel = {
+                          FOOD: 'Food',
+                          INSTAMART: 'InstaMart',
+                          DINE_IN: 'Dine-in',
+                          MESS_TIFFIN: 'Mess & Tiffin Service',
+                          CATERING: 'Catering'
+                        }[srv] || srv;
+                        return (
+                          <div key={srv} className="bg-[white] border border-[#141B20] rounded-lg px-2.5 py-1 text-[10px] font-bold text-[#141B20] flex items-center gap-1.5">
+                            <span>{srvLabel}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (itemServiceTypes.length > 1) {
+                                  setItemServiceTypes(itemServiceTypes.filter(id => id !== srv));
+                                } else {
+                                  addToast('At least one service type is required', 'warning');
+                                }
+                              }}
+                              className="text-[#141B20] hover:text-[#F15A25] font-bold"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -1280,8 +1313,8 @@ export default function MenuManagement() {
                                     Combo
                                   </span>
                                 )}
-                                <span className="bg-[white] text-[#F15A25] text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0">
-                                  {item.service_type || 'FOOD'}
+                                <span className="text-[#141B20]/60 text-[8px] font-extrabold uppercase tracking-wider shrink-0 ml-1">
+                                  {(item.service_types && item.service_types.length > 0) ? item.service_types.join(' · ') : (item.service_type || 'FOOD')}
                                 </span>
                               </div>
                               {item.description && <span className="text-[10px] text-[#141B20] font-light truncate block mt-0.5 max-w-[200px]">{item.description}</span>}
