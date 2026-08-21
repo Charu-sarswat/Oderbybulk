@@ -8,7 +8,7 @@ import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useCustomerUI } from '../../context/CustomerUIContext';
 import { restaurantData } from '../../config/restaurantData';
 import WhatsAppIcon from './WhatsAppIcon';
-const logoBanner = '/l.png';
+const logoBanner = '/lok.png';
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -138,7 +138,7 @@ export default function Header() {
           <img 
             src={logoBanner} 
             alt="Order By Bulk" 
-            className="h-8 sm:h-12 w-auto object-contain scale-125 origin-left"
+            className="h-9 sm:h-11 w-auto object-contain"
           />
         </Link>
 

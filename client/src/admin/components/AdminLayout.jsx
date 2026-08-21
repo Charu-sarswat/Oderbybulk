@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 
 // Brand Logos
-const logoIcon = '/l.png';
-const logoBanner = '/l.png';
+const logoIcon = '/lok.png';
+const logoBanner = '/lok.png';
 
 /** Shared sidebar nav content — renders inside both desktop aside & mobile drawer */
 function SidebarContent({ user, navLinks, location, isCollapsed, handleLogout, onLinkClick }) {

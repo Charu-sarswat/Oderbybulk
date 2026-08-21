@@ -6,7 +6,7 @@ import {
   Facebook, Twitter, Youtube, Link as LinkIcon
 } from 'lucide-react';
 import { restaurantData } from '../../config/restaurantData';
-const logoBanner = '/l.png';
+const logoBanner = '/lok.png';
 import WhatsAppIcon from './WhatsAppIcon';
 
 export default function Footer({ onOpenCatering }) {

@@ -6,7 +6,7 @@ import { Lock, User, AlertCircle, ShieldCheck } from 'lucide-react';
 import { restaurantConfig } from '../../config/restaurant';
 
 // Brand Logo
-const logoFull = '/l.png';
+const logoFull = '/lok.png';
 
 export default function Login() {
   const navigate = useNavigate();

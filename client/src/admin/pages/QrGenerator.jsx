@@ -3,8 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { QrCode, Download, Printer, Settings, RefreshCw, CheckCircle } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
-const logoIcon = '/l.png';
-const logoFull = '/l.png';
+const logoIcon = '/lok.png';
+const logoFull = '/lok.png';
 
 export default function QrGenerator() {
   const { token } = useAuth();
