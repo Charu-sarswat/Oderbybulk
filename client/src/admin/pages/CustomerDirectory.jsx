@@ -127,7 +127,7 @@ export default function CustomerDirectory() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Users className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -137,7 +137,7 @@ export default function CustomerDirectory() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -149,7 +149,7 @@ export default function CustomerDirectory() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <User className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -236,11 +236,11 @@ export default function CustomerDirectory() {
                     {/* Account Type */}
                     <td className="py-4 px-4 sm:px-6">
                       {c.id ? (
-                        <span className="bg-[white] text-[#F15A25] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-[#F15A25]">
+                        <span className="bg-[white] text-[#A97E16] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-[#A97E16]">
                           Registered
                         </span>
                       ) : (
-                        <span className="bg-[white] text-[#F15A25] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-[#F15A25]">
+                        <span className="bg-[white] text-[#A97E16] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-[#A97E16]">
                           Guest
                         </span>
                       )}
@@ -283,7 +283,7 @@ export default function CustomerDirectory() {
                             href={`https://wa.me/${c.phone.replace(/[^0-9]/g, '').length === 10 ? '91' + c.phone.replace(/[^0-9]/g, '') : c.phone.replace(/[^0-9]/g, '')}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="p-1.5 bg-[white] hover:bg-[white] text-[#F15A25] rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center shadow-xs"
+                            className="p-1.5 bg-[white] hover:bg-[white] text-[#A97E16] rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center shadow-xs"
                             title="Chat on WhatsApp"
                           >
                             <WhatsAppIcon className="w-3.5 h-3.5" color="currentColor" />
@@ -338,8 +338,8 @@ export default function CustomerDirectory() {
                   <h4 className="font-bold text-base text-[#141B20]">{selectedCustomer.name}</h4>
                   <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full uppercase mt-1.5 border ${
                     selectedCustomer.id 
-                      ? 'bg-[white] text-[#F15A25] border-[#F15A25]' 
-                      : 'bg-[white] text-[#F15A25] border-[#F15A25]'
+                      ? 'bg-[white] text-[#A97E16] border-[#A97E16]' 
+                      : 'bg-[white] text-[#A97E16] border-[#A97E16]'
                   }`}>
                     {selectedCustomer.id ? 'Registered Client' : 'Guest'}
                   </span>
@@ -381,7 +381,7 @@ export default function CustomerDirectory() {
                 {customerOrders.find(o => o.delivery_address) && (
                   <div className="border border-[#141B20] p-3 rounded-lg space-y-0.5 col-span-1 sm:col-span-2">
                     <span className="text-[9px] uppercase font-bold text-[#141B20] tracking-wider flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#F15A25]" />
+                      <MapPin className="w-3 h-3 text-[#A97E16]" />
                       Latest Delivery Address
                     </span>
                     <div className="font-semibold text-[#141B20] break-words">
@@ -412,8 +412,8 @@ export default function CustomerDirectory() {
                           <span>ORDER #{order.id} ({new Date(order.created_at).toLocaleDateString()})</span>
                           <span className={`uppercase px-1.5 py-0.5 rounded text-[8px] border ${
                             order.status === 'served' 
-                              ? 'bg-[white] text-[#F15A25] border-[#F15A25]' 
-                              : 'bg-[white] text-[#F15A25] border-[#F15A25]'
+                              ? 'bg-[white] text-[#A97E16] border-[#A97E16]' 
+                              : 'bg-[white] text-[#A97E16] border-[#A97E16]'
                           }`}>
                             {order.status}
                           </span>
@@ -428,12 +428,12 @@ export default function CustomerDirectory() {
                           ))}
                         </div>
 
-                        <div className="flex justify-between items-center text-[10px] font-bold text-[#141B20] pt-1 border-t border-[#F15A25]">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-[#141B20] pt-1 border-t border-[#A97E16]">
                           <span>{order.order_channel === 'dine_in' ? 'Dine-In' : order.order_channel === 'delivery' ? 'Delivery' : 'Takeaway'}</span>
                           <span className="text-[#141B20] text-xs">Total: {restaurantConfig.currency}{parseFloat(order.total_amount).toFixed(2)}</span>
                         </div>
                         {order.delivery_address && (
-                          <div className="text-[9px] text-[#F15A25] bg-[white] border border-[#F15A25] rounded px-1.5 py-0.5 mt-1 font-semibold max-w-full break-words">
+                          <div className="text-[9px] text-[#A97E16] bg-[white] border border-[#A97E16] rounded px-1.5 py-0.5 mt-1 font-semibold max-w-full break-words">
                             📍 Address: {order.delivery_address}
                           </div>
                         )}

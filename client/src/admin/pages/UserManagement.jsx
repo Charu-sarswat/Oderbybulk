@@ -194,9 +194,9 @@ export default function UserManagement() {
   const getRoleBadgeColor = (r) => {
     switch (r) {
       case 'admin':
-        return 'bg-[white] text-[#F15A25] border-[#F15A25]';
+        return 'bg-[white] text-[#A97E16] border-[#A97E16]';
       case 'kitchen':
-        return 'bg-[white] text-[#F15A25] border-[#F15A25]';
+        return 'bg-[white] text-[#A97E16] border-[#A97E16]';
       default:
         return 'bg-neutral-50 text-[#141B20] border-[#141B20]';
     }
@@ -226,7 +226,7 @@ export default function UserManagement() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Users className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -236,7 +236,7 @@ export default function UserManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Shield className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -248,7 +248,7 @@ export default function UserManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <UserCheck className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -319,7 +319,7 @@ export default function UserManagement() {
                         <div>
                           <span className="font-serif font-black text-sm text-[#141B20] block">{u.username}</span>
                           {u.id === currentUser.id && (
-                            <span className="text-[9px] text-[#F15A25] font-extrabold uppercase bg-[white] border border-[#F15A25] px-1.5 py-0.5 rounded mt-0.5 inline-block">
+                            <span className="text-[9px] text-[#A97E16] font-extrabold uppercase bg-[white] border border-[#A97E16] px-1.5 py-0.5 rounded mt-0.5 inline-block">
                               Active Session
                             </span>
                           )}
@@ -341,14 +341,14 @@ export default function UserManagement() {
                           setEditUsername(u.username);
                           setEditRole(u.role);
                         }}
-                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
+                        className="p-2 text-[#A97E16] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
                         title="Edit user details"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setSelectedUserForPassword(u)}
-                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
+                        className="p-2 text-[#A97E16] hover:bg-[white] rounded-xl transition-all cursor-pointer inline-block"
                         title="Change user password"
                       >
                         <Key className="w-4 h-4" />
@@ -356,7 +356,7 @@ export default function UserManagement() {
                       <button
                         onClick={() => handleDeleteUser(u.id, u.username)}
                         disabled={u.id === currentUser.id}
-                        className="p-2 text-[#F15A25] hover:bg-[white] rounded-xl transition-all cursor-pointer disabled:opacity-30 disabled:hover:bg-transparent inline-block"
+                        className="p-2 text-[#A97E16] hover:bg-[white] rounded-xl transition-all cursor-pointer disabled:opacity-30 disabled:hover:bg-transparent inline-block"
                         title={u.id === currentUser.id ? "Cannot delete active session" : "Delete system user"}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -591,7 +591,7 @@ export default function UserManagement() {
                   <option value="admin">System Administrator</option>
                 </select>
                 {selectedUserForEdit.id === currentUser.id && (
-                  <span className="text-[10px] text-[#F15A25] block mt-1">Cannot change your own administrative role.</span>
+                  <span className="text-[10px] text-[#A97E16] block mt-1">Cannot change your own administrative role.</span>
                 )}
               </div>
 

@@ -103,7 +103,7 @@ export default function Settings() {
           <div className="bg-[white] rounded-3xl p-6 border border-[#141B20] shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#141B20]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
                   <Truck className="w-5 h-5" />
                 </div>
                 <div>
@@ -112,7 +112,7 @@ export default function Settings() {
                 </div>
               </div>
               <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
-                isDeliveryEnabled ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' : 'bg-[white] text-[#F15A25] border border-[#F15A25]'
+                isDeliveryEnabled ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' : 'bg-[white] text-[#A97E16] border border-[#A97E16]'
               }`}>
                 {isDeliveryEnabled ? '🟢 Delivery Active' : '🔴 Delivery Paused'}
               </span>
@@ -203,7 +203,7 @@ export default function Settings() {
           <div className="bg-[white] rounded-3xl p-6 border border-[#141B20] shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#141B20]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[white] border border-[#F15A25] text-[#141B20] flex items-center justify-center font-bold shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[white] border border-[#A97E16] text-[#141B20] flex items-center justify-center font-bold shrink-0">
                   <Shield className="w-5 h-5" />
                 </div>
                 <div>
@@ -212,7 +212,7 @@ export default function Settings() {
                 </div>
               </div>
               <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
-                isStoreOpen ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' : 'bg-[white] text-[#F15A25] border border-[#F15A25]'
+                isStoreOpen ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' : 'bg-[white] text-[#A97E16] border border-[#A97E16]'
               }`}>
                 {isStoreOpen ? '🟢 Accepting Orders' : '🔴 Closed / Restricted'}
               </span>
@@ -296,14 +296,14 @@ export default function Settings() {
               <Sparkles className="w-3.5 h-3.5 text-[white]" />
               Customer Checkout Preview
             </h4>
-            <div className="bg-[white] rounded-2xl p-4 space-y-2 border border-orange-100/50">
+            <div className="bg-[white] rounded-2xl p-4 space-y-2 border border-[#A97E16]/50">
               <div className="flex justify-between text-xs text-[#141B20] font-medium">
                 <span>Subtotal less than ₹{freeThreshold}</span>
                 <span className="font-semibold text-[#141B20]">Subtotal + ₹{deliveryFee} Delivery Fee</span>
               </div>
               <div className="flex justify-between text-xs text-[#141B20] font-medium border-t border-[#141B20]/50 pt-2">
                 <span>Subtotal of ₹{freeThreshold} or more</span>
-                <span className="font-extrabold text-[#F15A25] uppercase text-[10px]">Free Delivery</span>
+                <span className="font-extrabold text-[#A97E16] uppercase text-[10px]">Free Delivery</span>
               </div>
             </div>
           </div>
@@ -318,10 +318,10 @@ export default function Settings() {
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 bg-[white] border border-[#F15A25] rounded-2xl space-y-2.5 shadow-xs">
+              <div className="p-4 bg-[white] border border-[#A97E16] rounded-2xl space-y-2.5 shadow-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-xs text-[#141B20]">🛵 Borzo Express 2-Wheeler</span>
-                  <span className="bg-[white] text-[#F15A25] text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  <span className="bg-[white] text-[#A97E16] text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
                     Active & Connected
                   </span>
                 </div>
@@ -346,11 +346,11 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="bg-[white] border border-[#F15A25] rounded-3xl p-5 flex items-start gap-3">
+          <div className="bg-[white] border border-[#A97E16] rounded-3xl p-5 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-[white] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h5 className="font-bold text-[11px] text-[#F15A25]">Credential Security</h5>
-              <p className="text-[10px] text-[#F15A25] leading-relaxed font-medium">
+              <h5 className="font-bold text-[11px] text-[#A97E16]">Credential Security</h5>
+              <p className="text-[10px] text-[#A97E16] leading-relaxed font-medium">
                 To guarantee optimal safety, API credentials and partner setup constants are maintained securely inside system configuration files.
               </p>
             </div>

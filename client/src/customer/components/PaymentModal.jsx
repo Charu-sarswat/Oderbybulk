@@ -132,7 +132,7 @@ export default function PaymentModal({ isOpen, onClose, onSuccess, totalAmount }
                 <div className="pt-4">
                   <button
                     onClick={handleDonePayment}
-                    className="w-full bg-[#F15A25] hover:brightness-110 text-[white] font-black py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
+                    className="w-full bg-[#A97E16] hover:brightness-110 text-[white] font-black py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
                   >
                     <span>I have completed the payment</span>
                   </button>

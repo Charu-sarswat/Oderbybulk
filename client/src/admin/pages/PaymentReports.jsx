@@ -130,7 +130,7 @@ export default function PaymentReports() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -140,7 +140,7 @@ export default function PaymentReports() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Clock className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -150,7 +150,7 @@ export default function PaymentReports() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <CreditCard className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -241,10 +241,10 @@ export default function PaymentReports() {
                     <td className="py-4 px-4 sm:px-6 text-center">
                       <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${
                         order.payment_status === 'paid' 
-                          ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' 
+                          ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' 
                           : order.status === 'cancelled'
                           ? 'bg-[white] text-[#141B20]'
-                          : 'bg-[white] text-[#F15A25] border border-[#F15A25] animate-pulse'
+                          : 'bg-[white] text-[#A97E16] border border-[#A97E16] animate-pulse'
                       }`}>
                         {order.payment_status === 'paid' ? 'Paid' : order.status === 'cancelled' ? 'Cancelled' : 'Unpaid'}
                       </span>

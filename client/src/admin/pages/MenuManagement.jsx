@@ -497,7 +497,7 @@ export default function MenuManagement() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -507,7 +507,7 @@ export default function MenuManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Utensils className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -517,7 +517,7 @@ export default function MenuManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Gift className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -529,7 +529,7 @@ export default function MenuManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <span className="font-bold text-xs">100%</span>
           </div>
           <div className="min-w-0 flex-1">
@@ -625,7 +625,7 @@ export default function MenuManagement() {
                     <button
                       type="button"
                       onClick={() => setCatImg('')}
-                      className="text-[10px] text-[#F15A25] font-bold hover:underline cursor-pointer"
+                      className="text-[10px] text-[#A97E16] font-bold hover:underline cursor-pointer"
                     >
                       Clear Image
                     </button>
@@ -683,7 +683,7 @@ export default function MenuManagement() {
                     </button>
                     <button
                       onClick={() => handleDeleteCategory(cat.id, cat.name)}
-                      className="text-[#141B20] hover:text-[#F15A25] transition-colors p-1 cursor-pointer"
+                      className="text-[#141B20] hover:text-[#A97E16] transition-colors p-1 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -949,7 +949,7 @@ export default function MenuManagement() {
                                   addToast('At least one service type is required', 'warning');
                                 }
                               }}
-                              className="text-[#141B20] hover:text-[#F15A25] font-bold"
+                              className="text-[#141B20] hover:text-[#A97E16] font-bold"
                             >
                               ×
                             </button>
@@ -1041,7 +1041,7 @@ export default function MenuManagement() {
                           <button
                             type="button"
                             onClick={() => setVariants(prev => prev.filter((_, i) => i !== idx))}
-                            className="text-[#141B20] hover:text-[#F15A25] font-bold"
+                            className="text-[#141B20] hover:text-[#A97E16] font-bold"
                           >
                             ×
                           </button>
@@ -1094,7 +1094,7 @@ export default function MenuManagement() {
                           <button
                             type="button"
                             onClick={() => setAddons(prev => prev.filter((_, i) => i !== idx))}
-                            className="text-[#141B20] hover:text-[#F15A25] font-bold"
+                            className="text-[#141B20] hover:text-[#A97E16] font-bold"
                           >
                             ×
                           </button>
@@ -1157,12 +1157,12 @@ export default function MenuManagement() {
                       {recipe.map((r, idx) => {
                         const mat = rawMaterials.find(m => (m._id || m.id) === r.raw_material_id);
                         return (
-                          <div key={idx} className="bg-[white] border border-[#F15A25] rounded-lg px-2.5 py-1 text-[10px] font-bold text-[#141B20] flex items-center gap-1.5">
+                          <div key={idx} className="bg-[white] border border-[#A97E16] rounded-lg px-2.5 py-1 text-[10px] font-bold text-[#141B20] flex items-center gap-1.5">
                             <span>{mat ? mat.name : 'Unknown Raw Material'} ({r.quantity_required} {mat ? mat.unit : ''})</span>
                             <button
                               type="button"
                               onClick={() => setRecipe(prev => prev.filter((_, i) => i !== idx))}
-                              className="text-[#141B20] hover:text-[#F15A25] font-bold"
+                              className="text-[#141B20] hover:text-[#A97E16] font-bold"
                             >
                               ×
                             </button>
@@ -1178,7 +1178,7 @@ export default function MenuManagement() {
                         type="checkbox"
                         checked={itemIsVeg}
                         onChange={(e) => setItemIsVeg(e.target.checked)}
-                        className="w-4.5 h-4.5 border-[#141B20] rounded focus:ring-[#F15A25] text-[#F15A25]"
+                        className="w-4.5 h-4.5 border-[#141B20] rounded focus:ring-[#A97E16] text-[#A97E16]"
                       />
                       <span className="text-xs text-[#141B20] font-bold">Vegetarian (Veg)</span>
                     </label>
@@ -1193,14 +1193,14 @@ export default function MenuManagement() {
                       <span className="text-xs text-[#141B20] font-bold">In Stock / Available</span>
                     </label>
 
-                    <label className="flex items-center gap-2 cursor-pointer select-none bg-[white] border border-[#F15A25] px-2.5 py-1 rounded-xl">
+                    <label className="flex items-center gap-2 cursor-pointer select-none bg-[white] border border-[#A97E16] px-2.5 py-1 rounded-xl">
                       <input
                         type="checkbox"
                         checked={isUnlimitedStock}
                         onChange={(e) => setIsUnlimitedStock(e.target.checked)}
-                        className="w-4.5 h-4.5 border-[#F15A25] rounded focus:ring-[#F15A25] text-[#F15A25]"
+                        className="w-4.5 h-4.5 border-[#A97E16] rounded focus:ring-[#A97E16] text-[#A97E16]"
                       />
-                      <span className="text-xs text-[#F15A25] font-bold flex items-center gap-1">
+                      <span className="text-xs text-[#A97E16] font-bold flex items-center gap-1">
                         ♾️ Unlimited Stock (e.g. Water, Beverages)
                       </span>
                     </label>
@@ -1210,9 +1210,9 @@ export default function MenuManagement() {
                         type="checkbox"
                         checked={itemIsFeatured}
                         onChange={(e) => setItemIsFeatured(e.target.checked)}
-                        className="w-4.5 h-4.5 border-[#141B20] rounded focus:ring-[#F15A25] text-[#F15A25]"
+                        className="w-4.5 h-4.5 border-[#141B20] rounded focus:ring-[#A97E16] text-[#A97E16]"
                       />
-                      <span className="text-xs text-[#141B20] font-bold text-[#F15A25] flex items-center gap-1">★ Featured / Special</span>
+                      <span className="text-xs text-[#141B20] font-bold text-[#A97E16] flex items-center gap-1">★ Featured / Special</span>
                     </label>
                   </div>
                 </div>
@@ -1298,17 +1298,17 @@ export default function MenuManagement() {
                             )}
                             <div className="min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <span className={`w-2 h-2 rounded-full flex items-center justify-center border ${item.is_veg ? 'border-[#F15A25]' : 'border-[#F15A25]'} shrink-0`}>
+                                <span className={`w-2 h-2 rounded-full flex items-center justify-center border ${item.is_veg ? 'border-[#A97E16]' : 'border-[#A97E16]'} shrink-0`}>
                                   <span className={`w-1.5 h-1.5 rounded-full ${item.is_veg ? 'bg-[white]' : 'bg-[white]'}`}></span>
                                 </span>
                                 <span className="font-serif font-black text-sm text-[#141B20] truncate block">{item.name}</span>
                                 {item.is_unlimited_stock && (
-                                  <span className="bg-[white] text-[#F15A25] border border-[#F15A25] text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
+                                  <span className="bg-[white] text-[#A97E16] border border-[#A97E16] text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
                                     ♾️ Unlimited
                                   </span>
                                 )}
                                 {item.is_combo && (
-                                  <span className="bg-[white] text-[#F15A25] text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
+                                  <span className="bg-[white] text-[#A97E16] text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
                                     <Gift className="w-2.5 h-2.5" />
                                     Combo
                                   </span>
@@ -1335,7 +1335,7 @@ export default function MenuManagement() {
                             className="text-[#141B20] hover:text-[#141B20] transition-colors mx-auto block"
                           >
                             {item.is_available ? (
-                              <ToggleRight className="w-6.5 h-6.5 text-[#F15A25] fill-emerald-100" />
+                              <ToggleRight className="w-6.5 h-6.5 text-[#A97E16] fill-emerald-100" />
                             ) : (
                               <ToggleLeft className="w-6.5 h-6.5 text-[#141B20]" />
                             )}
@@ -1352,7 +1352,7 @@ export default function MenuManagement() {
                             </button>
                             <button
                               onClick={() => handleDeleteItem(item.id, item.name)}
-                              className="bg-[white] hover:bg-[white] border border-[#141B20]/60 hover:border-[#F15A25] p-2 rounded-lg transition-colors cursor-pointer text-[#141B20] hover:text-[#F15A25]"
+                              className="bg-[white] hover:bg-[white] border border-[#141B20]/60 hover:border-[#A97E16] p-2 rounded-lg transition-colors cursor-pointer text-[#141B20] hover:text-[#A97E16]"
                               title="Delete Dish"
                             >
                               <Trash2 className="w-3.5 h-3.5" />

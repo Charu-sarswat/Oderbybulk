@@ -5,7 +5,7 @@ export default function PageHeader({ title, description, icon: Icon, children })
     <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[white] text-[#141B20] p-4 sm:p-6 rounded-2xl sm:rounded-[24px] border border-[#141B20]/10 shadow-lg gap-3 sm:gap-4">
       <div className="flex items-start gap-2.5 sm:gap-3 min-w-0">
         {Icon && (
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#141B20]/5 border border-[#141B20]/10 flex items-center justify-center text-[#F15A25] shrink-0 mt-0.5">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#141B20]/5 border border-[#141B20]/10 flex items-center justify-center text-[#A97E16] shrink-0 mt-0.5">
             <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
         )}

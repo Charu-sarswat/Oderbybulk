@@ -913,7 +913,7 @@ export default function OrderHistory() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <FileText className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -923,7 +923,7 @@ export default function OrderHistory() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -935,7 +935,7 @@ export default function OrderHistory() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#141B20] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#141B20] flex items-center justify-center font-bold shrink-0">
             <IndianRupee className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -947,7 +947,7 @@ export default function OrderHistory() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <TrendingUp className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -1060,12 +1060,12 @@ export default function OrderHistory() {
                          {order.order_channel === 'dine_in' ? '🍽️ Dine-In' : order.order_channel === 'delivery' ? '🚗 Delivery' : '🛍️ Takeaway'}
                        </div>
                       {order.delivery_address && (
-                        <div className="text-[9px] text-[#141B20] bg-[white] border border-[#F15A25] rounded px-1.5 py-0.5 mt-0.5 max-w-[150px] truncate block w-max" title={order.delivery_address}>
+                        <div className="text-[9px] text-[#141B20] bg-[white] border border-[#A97E16] rounded px-1.5 py-0.5 mt-0.5 max-w-[150px] truncate block w-max" title={order.delivery_address}>
                           📍 {order.delivery_address}
                         </div>
                       )}
                       {order.scheduled_time && (
-                        <div className="text-[9px] text-[#F15A25] bg-[white] border border-[#F15A25] rounded px-1.5 py-0.5 mt-0.5 w-max">
+                        <div className="text-[9px] text-[#A97E16] bg-[white] border border-[#A97E16] rounded px-1.5 py-0.5 mt-0.5 w-max">
                           📅 {new Date(order.scheduled_time).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}
                         </div>
                       )}
@@ -1076,17 +1076,17 @@ export default function OrderHistory() {
                     </td>
                     <td className="py-4 px-4 sm:px-6 text-center">
                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${
-                         order.status === 'served' || order.status === 'delivered' ? 'bg-[white] text-[#F15A25]' : 
-                         order.status === 'cancelled' ? 'bg-[white] text-[#F15A25]' : 
-                         order.status === 'out_for_delivery' ? 'bg-[white] text-[#F15A25]' :
-                         order.status === 'hold' ? 'bg-orange-50 text-orange-700 border border-orange-200' : 'bg-[white] text-[#F15A25]'
+                         order.status === 'served' || order.status === 'delivered' ? 'bg-[white] text-[#A97E16]' : 
+                         order.status === 'cancelled' ? 'bg-[white] text-[#A97E16]' : 
+                         order.status === 'out_for_delivery' ? 'bg-[white] text-[#A97E16]' :
+                         order.status === 'hold' ? 'bg-[#A97E16] text-[#A97E16] border border-[#A97E16]' : 'bg-[white] text-[#A97E16]'
                        }`}>
                          {order.status.replace(/_/g, ' ')}
                        </span>
                     </td>
                     <td className="py-4 px-4 sm:px-6 text-center">
                       <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
-                        order.payment_status === 'paid' ? 'bg-[white] text-[#F15A25]' : 'bg-[white] text-[#F15A25]'
+                        order.payment_status === 'paid' ? 'bg-[white] text-[#A97E16]' : 'bg-[white] text-[#A97E16]'
                       }`}>
                         {order.payment_status} ({order.payment_method})
                       </span>
@@ -1100,7 +1100,7 @@ export default function OrderHistory() {
                         {!['served', 'delivered', 'cancelled'].includes(order.status) ? (
                           <button
                             onClick={() => handleOpenEditModal(order)}
-                            className="p-1.5 bg-[white] text-[#141B20] hover:bg-orange-500/20 hover:text-orange-600 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 bg-[white] text-[#141B20] hover:bg-[#A97E16]/20 hover:text-[#A97E16] rounded-lg transition-colors cursor-pointer"
                             title="Edit / Complete Order"
                           >
                             <Edit className="w-3.5 h-3.5" />
@@ -1204,7 +1204,7 @@ export default function OrderHistory() {
                       const isOutOfStock = !isUnlimited && (item.is_available === false || (item.stock_quantity || 0) <= 0);
 
                       return (
-                        <div key={item.id} className="p-3.5 bg-[white] hover:bg-[white] rounded-2xl border border-[#141B20] shadow-xs flex items-center justify-between transition-all gap-3 hover:border-[#F15A25]">
+                        <div key={item.id} className="p-3.5 bg-[white] hover:bg-[white] rounded-2xl border border-[#141B20] shadow-xs flex items-center justify-between transition-all gap-3 hover:border-[#A97E16]">
                           <div className="flex items-center gap-3.5 min-w-0 flex-1">
                             <img 
                               src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200'} 
@@ -1221,7 +1221,7 @@ export default function OrderHistory() {
                                 {isOutOfStock && (
                                   <>
                                     <span className="text-[#141B20]">•</span>
-                                    <span className="text-[#F15A25] font-bold">Out of stock</span>
+                                    <span className="text-[#A97E16] font-bold">Out of stock</span>
                                   </>
                                 )}
                               </div>
@@ -1258,7 +1258,7 @@ export default function OrderHistory() {
                     <div className="flex items-center justify-between mb-1">
                       <label className="block text-[11px] font-bold text-[#141B20]">Order Channel / Dining Type</label>
                       {editingOrderId && (
-                        <span className="text-[9px] font-bold text-[#F15A25] bg-[white] px-1.5 py-0.5 rounded">Fixed on edit</span>
+                        <span className="text-[9px] font-bold text-[#A97E16] bg-[white] px-1.5 py-0.5 rounded">Fixed on edit</span>
                       )}
                     </div>
                     <select
@@ -1305,7 +1305,7 @@ export default function OrderHistory() {
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-[11px] font-bold text-[#141B20]">Order Timing</label>
                     {editingOrderId && (
-                      <span className="text-[9px] font-bold text-[#F15A25] bg-[white] px-1.5 py-0.5 rounded">Fixed on edit</span>
+                      <span className="text-[9px] font-bold text-[#A97E16] bg-[white] px-1.5 py-0.5 rounded">Fixed on edit</span>
                     )}
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -1536,7 +1536,7 @@ export default function OrderHistory() {
                           type="button"
                           disabled={cart.length === 0}
                           onClick={() => handleCreateOrderSubmit(null, 'hold')}
-                          className={`py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-white shadow-xs transition-colors cursor-pointer bg-orange-600 hover:bg-orange-700 disabled:bg-[white] disabled:cursor-not-allowed`}
+                          className={`py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-white shadow-xs transition-colors cursor-pointer bg-[#A97E16] hover:bg-[#A97E16] disabled:bg-[white] disabled:cursor-not-allowed`}
                         >
                           Hold Order
                         </button>
@@ -1579,12 +1579,12 @@ export default function OrderHistory() {
                     {selectedOrder.order_channel === 'dine_in' ? '🍽️ Dine-In' : selectedOrder.order_channel === 'delivery' ? '🚗 Delivery' : '🛍️ Takeaway'}
                   </div>
                   {selectedOrder.delivery_address && (
-                    <div className="text-[11px] text-[#F15A25] bg-[white] border border-[#F15A25] rounded px-2 py-1 mt-1.5 font-medium max-w-[250px] break-words">
+                    <div className="text-[11px] text-[#A97E16] bg-[white] border border-[#A97E16] rounded px-2 py-1 mt-1.5 font-medium max-w-[250px] break-words">
                       📍 Address: {selectedOrder.delivery_address}
                     </div>
                   )}
                   {selectedOrder.scheduled_time && (
-                    <div className="text-[11px] text-[#F15A25] bg-[white] border border-[#F15A25] rounded px-2 py-1 mt-1.5 font-medium">
+                    <div className="text-[11px] text-[#A97E16] bg-[white] border border-[#A97E16] rounded px-2 py-1 mt-1.5 font-medium">
                       📅 Scheduled: {new Date(selectedOrder.scheduled_time).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' })}
                     </div>
                   )}
@@ -1598,7 +1598,7 @@ export default function OrderHistory() {
 
                   {/* Borzo Delivery Partner details if applicable */}
                   {selectedOrder.order_channel === 'delivery' && selectedOrder.delivery_job_id && (
-                    <div className="mt-3 text-xs border rounded-xl p-3 max-w-[280px] space-y-1.5 bg-gradient-to-br from-amber-50/70 to-emerald-50/50 border-[#F15A25] shadow-2xs">
+                    <div className="mt-3 text-xs border rounded-xl p-3 max-w-[280px] space-y-1.5 bg-gradient-to-br from-amber-50/70 to-emerald-50/50 border-[#A97E16] shadow-2xs">
                       <div className="font-black text-[10px] uppercase tracking-wider flex items-center justify-between text-[#141B20]">
                         <span>🛵 Borzo 2-Wheeler</span>
                         <span className="text-[8px] font-mono font-normal text-[#141B20]">Ref: {selectedOrder.delivery_job_id}</span>
@@ -1616,25 +1616,25 @@ export default function OrderHistory() {
                         </div>
                       )}
                       
-                      <div className="text-[9px] uppercase tracking-wider font-black text-[#F15A25] flex items-center gap-1">
+                      <div className="text-[9px] uppercase tracking-wider font-black text-[#A97E16] flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-[white] animate-pulse"></span>
                         Status: {selectedOrder.delivery_status || 'Assigned'}
                       </div>
 
                       {(selectedOrder.pickup_otp || selectedOrder.delivery_otp) && (
-                        <div className="text-[10px] bg-[white]/95 border border-[#F15A25] rounded p-1.5 space-y-1">
+                        <div className="text-[10px] bg-[white]/95 border border-[#A97E16] rounded p-1.5 space-y-1">
                           {selectedOrder.pickup_otp && (
                             <div className="flex items-center justify-between">
-                              <span className="text-[#F15A25] font-bold">🏬 Pickup OTP (Give to Rider):</span>
-                              <span className="font-mono font-black text-[#F15A25] bg-[white] px-1.5 py-0.2 rounded border border-[#F15A25]">
+                              <span className="text-[#A97E16] font-bold">🏬 Pickup OTP (Give to Rider):</span>
+                              <span className="font-mono font-black text-[#A97E16] bg-[white] px-1.5 py-0.2 rounded border border-[#A97E16]">
                                 {selectedOrder.pickup_otp}
                               </span>
                             </div>
                           )}
                           {selectedOrder.delivery_otp && (
                             <div className="flex items-center justify-between">
-                              <span className="text-[#F15A25] font-bold">🏠 Drop OTP (Customer Code):</span>
-                              <span className="font-mono font-black text-[#F15A25] bg-[white] px-1.5 py-0.2 rounded border border-[#F15A25]">
+                              <span className="text-[#A97E16] font-bold">🏠 Drop OTP (Customer Code):</span>
+                              <span className="font-mono font-black text-[#A97E16] bg-[white] px-1.5 py-0.2 rounded border border-[#A97E16]">
                                 {selectedOrder.delivery_otp}
                               </span>
                             </div>
@@ -1643,12 +1643,12 @@ export default function OrderHistory() {
                       )}
 
                       {/* Always show Both Pickup & Drop Tracking Links for Admin */}
-                      <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#F15A25] text-[9px] font-bold">
+                      <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#A97E16] text-[9px] font-bold">
                         <a
                           href={selectedOrder.pickup_tracking_url || `https://borzodelivery.com/in/track/${selectedOrder.delivery_job_id.toString().replace(/^BRZ-/, '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-[white] hover:bg-[white] text-[#F15A25] py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
+                          className="bg-[white] hover:bg-[white] text-[#A97E16] py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
                           title="Always track rider arrival to restaurant (Pickup)"
                         >
                           <span>🏬 Pickup Track</span>
@@ -1658,7 +1658,7 @@ export default function OrderHistory() {
                           href={selectedOrder.delivery_tracking_url || `https://borzodelivery.com/in/track/${selectedOrder.delivery_job_id.toString().replace(/^BRZ-/, '')}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-[white] hover:bg-[white] text-[#F15A25] py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
+                          className="bg-[white] hover:bg-[white] text-[#A97E16] py-1.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
                           title="Always track rider delivering to customer (Drop)"
                         >
                           <span>🏠 Drop Track</span>
@@ -1777,7 +1777,7 @@ export default function OrderHistory() {
                             <button
                               type="button"
                               onClick={() => handleRemoveEditItem(item.menu_item_id)}
-                              className="p-1 text-[#F15A25] hover:bg-[white] rounded ml-2 cursor-pointer"
+                              className="p-1 text-[#A97E16] hover:bg-[white] rounded ml-2 cursor-pointer"
                               title="Delete Item"
                             >
                               <X className="w-4 h-4" />
@@ -1846,7 +1846,7 @@ export default function OrderHistory() {
                       <div key={idx} className="flex justify-between items-start">
                         <div>
                           <div className="text-sm font-semibold text-[#141B20]">{item.quantity}x {item.name}</div>
-                          {item.notes && <div className="text-xs text-[#F15A25] mt-0.5">Note: {item.notes}</div>}
+                          {item.notes && <div className="text-xs text-[#A97E16] mt-0.5">Note: {item.notes}</div>}
                         </div>
                         <div className="text-sm font-bold text-[#141B20]">
                           {restaurantConfig.currency}{(item.price * item.quantity).toFixed(2)}

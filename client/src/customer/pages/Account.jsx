@@ -172,7 +172,7 @@ export default function Account() {
                   placeholder="John Doe"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#F15A25] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#A97E16] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
                 />
               </div>
             )}
@@ -185,7 +185,7 @@ export default function Account() {
                 placeholder="Enter 10-digit number"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#F15A25] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#A97E16] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
               />
             </div>
 
@@ -197,7 +197,7 @@ export default function Account() {
                   placeholder="john@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#F15A25] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#A97E16] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
                 />
               </div>
             )}
@@ -210,14 +210,14 @@ export default function Account() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#F15A25] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
+                className="w-full px-4 py-3 rounded-xl border border-[#141B20] focus:outline-none focus:border-[#A97E16] bg-[#FFF9EE]/30 text-sm font-semibold transition-all"
               />
             </div>
 
             <button
               type="submit"
               disabled={authSubmitting}
-              className="w-full py-3.5 bg-[#F15A25] text-white hover:brightness-110 transition-colors rounded-xl font-black uppercase tracking-wider text-xs shadow-md mt-2 cursor-pointer flex items-center justify-center gap-2 border-0"
+              className="w-full py-3.5 bg-[#A97E16] text-white hover:brightness-110 transition-colors rounded-xl font-black uppercase tracking-wider text-xs shadow-md mt-2 cursor-pointer flex items-center justify-center gap-2 border-0"
             >
               {authSubmitting ? 'Processing...' : isRegister ? 'Register' : 'Login'}
             </button>
@@ -229,7 +229,7 @@ export default function Account() {
                   setIsRegister(!isRegister);
                   setFormData({ name: '', phone: '', email: '', password: '' });
                 }}
-                className="text-xs text-[#141B20] hover:text-[#F15A25] font-semibold cursor-pointer"
+                className="text-xs text-[#141B20] hover:text-[#A97E16] font-semibold cursor-pointer"
               >
                 {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
               </button>
@@ -247,7 +247,7 @@ export default function Account() {
         {/* Profile Card */}
         <section className="bg-[white] rounded-3xl p-6 sm:p-8 shadow-sm border border-[white]/20 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
           <div className="flex items-center gap-4.5">
-            <div className="w-16 h-16 bg-[#F15A25] text-[white] rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-[#A97E16] text-[white] rounded-2xl flex items-center justify-center shadow-lg">
               <User className="w-8 h-8" />
             </div>
             <div>
@@ -258,17 +258,17 @@ export default function Account() {
 
           <div className="w-full md:w-auto grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-[#141B20] bg-[#FFF9EE]/50 p-4.5 rounded-2xl border border-[white]/20">
             <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-[#F15A25]" />
+              <Phone className="w-4 h-4 text-[#A97E16]" />
               <span>{customerUser.phone}</span>
             </div>
             {customerUser.email && (
               <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#F15A25]" />
+                <Mail className="w-4 h-4 text-[#A97E16]" />
                 <span>{customerUser.email}</span>
               </div>
             )}
             <div className="flex items-center gap-2 sm:col-span-2">
-              <Calendar className="w-4 h-4 text-[#F15A25]" />
+              <Calendar className="w-4 h-4 text-[#A97E16]" />
               <span>Joined {new Date(customerUser.created_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function Account() {
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b border-[#141B20] pb-2">
             <h3 className="text-base font-serif font-extrabold text-[#141B20] tracking-tight flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#F15A25]" />
+              <ShoppingBag className="w-5 h-5 text-[#A97E16]" />
               <span>Order History</span>
             </h3>
             <span className="text-xs font-bold text-[#141B20] bg-[#FFF9EE] border border-[white]/30 px-2.5 py-0.5 rounded-full">
@@ -288,7 +288,7 @@ export default function Account() {
 
           {loadingOrders ? (
             <div className="text-center py-12">
-              <div className="w-8 h-8 border-3 border-[#F15A25] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+              <div className="w-8 h-8 border-3 border-[#A97E16] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
               <p className="text-xs text-[#141B20] font-semibold">Loading orders...</p>
             </div>
           ) : orders.length === 0 ? (
@@ -298,7 +298,7 @@ export default function Account() {
               <p className="text-xs text-[#141B20] mb-4 max-w-xs mx-auto">Once you place order at any table or for takeaway, they will appear here.</p>
               <button 
                 onClick={() => navigate('/menu')}
-                className="px-5 py-2.5 bg-[#F15A25] hover:bg-[#F15A25]/90 text-[white] text-xs font-black rounded-xl uppercase tracking-wider transition-colors cursor-pointer"
+                className="px-5 py-2.5 bg-[#A97E16] hover:bg-[#A97E16]/90 text-[white] text-xs font-black rounded-xl uppercase tracking-wider transition-colors cursor-pointer"
               >
                 Go to Menu
               </button>
@@ -340,7 +340,7 @@ export default function Account() {
                   <div className="flex md:flex-col justify-between items-end gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-[#141B20] shrink-0">
                     <div className="text-right">
                       <span className="text-[10px] text-[#141B20] uppercase tracking-widest block">Total Amount</span>
-                      <span className="text-base font-extrabold text-[#F15A25]">
+                      <span className="text-base font-extrabold text-[#A97E16]">
                         {restaurantConfig.currency}{parseFloat(order.total_amount).toFixed(0)}
                       </span>
                     </div>

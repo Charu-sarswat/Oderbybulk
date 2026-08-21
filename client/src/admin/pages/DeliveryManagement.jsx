@@ -232,7 +232,7 @@ export default function DeliveryManagement() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Bike className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -242,7 +242,7 @@ export default function DeliveryManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#141B20] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#141B20] flex items-center justify-center font-bold shrink-0">
             <Radio className="w-5 h-5 animate-pulse" />
           </div>
           <div className="min-w-0 flex-1">
@@ -252,7 +252,7 @@ export default function DeliveryManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Clock className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -262,7 +262,7 @@ export default function DeliveryManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -387,13 +387,13 @@ export default function DeliveryManagement() {
                       {/* 3. Delivery Status */}
                       <td className="py-3.5 px-4 sm:px-6 whitespace-nowrap">
                         {isCancelled ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#F15A25] border border-[#F15A25]">
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#A97E16] border border-[#A97E16]">
                             <span className="w-1.5 h-1.5 rounded-full bg-[white]" />
                             <span>Cancelled</span>
                           </span>
                         ) : isDelivered ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#F15A25] border border-[#F15A25]">
-                            <CheckCircle2 className="w-2.5 h-2.5 text-[#F15A25]" />
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#A97E16] border border-[#A97E16]">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-[#A97E16]" />
                             <span>Delivered</span>
                           </span>
                         ) : isOutForDelivery ? (
@@ -402,13 +402,13 @@ export default function DeliveryManagement() {
                             <span>On The Way</span>
                           </span>
                         ) : isBooked && hasRiderAssigned ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#F15A25] border border-[#F15A25]">
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#A97E16] border border-[#A97E16]">
                             <span className="w-1.5 h-1.5 rounded-full bg-[white]" />
                             <span>Rider Assigned</span>
                           </span>
                         ) : isBooked ? (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#F15A25] border border-[#F15A25] animate-pulse">
-                            <Loader2 className="w-2.5 h-2.5 animate-spin text-[#F15A25]" />
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[white] text-[#A97E16] border border-[#A97E16] animate-pulse">
+                            <Loader2 className="w-2.5 h-2.5 animate-spin text-[#A97E16]" />
                             <span>Finding Courier</span>
                           </span>
                         ) : (
@@ -438,7 +438,7 @@ export default function DeliveryManagement() {
                             </div>
                           ) : (
                             <div>
-                              <div className="text-[#F15A25] font-bold text-xs flex items-center gap-1">
+                              <div className="text-[#A97E16] font-bold text-xs flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[white] animate-ping" />
                                 <span>Searching for courier...</span>
                               </div>
@@ -457,12 +457,12 @@ export default function DeliveryManagement() {
                         {isBooked && !isCancelled && (order.pickup_otp || order.delivery_otp) ? (
                           <div className="inline-flex flex-col gap-1 text-[9px]">
                             {order.pickup_otp && (
-                              <span className="bg-[white] border border-[#F15A25] px-2 py-0.5 rounded text-[#F15A25] font-bold font-mono">
+                              <span className="bg-[white] border border-[#A97E16] px-2 py-0.5 rounded text-[#A97E16] font-bold font-mono">
                                 Pickup: <strong className="font-black">{order.pickup_otp}</strong>
                               </span>
                             )}
                             {order.delivery_otp && (
-                              <span className="bg-[white] border border-[#F15A25] px-2 py-0.5 rounded text-[#F15A25] font-bold font-mono">
+                              <span className="bg-[white] border border-[#A97E16] px-2 py-0.5 rounded text-[#A97E16] font-bold font-mono">
                                 Drop: <strong className="font-black">{order.delivery_otp}</strong>
                               </span>
                             )}
@@ -480,7 +480,7 @@ export default function DeliveryManagement() {
                               href={order.pickup_tracking_url || `https://borzodelivery.com/in/track/${order.delivery_job_id.toString().replace(/^BRZ-/, '')}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-[white] hover:bg-[white] text-[#F15A25] font-bold px-2 py-1 rounded-lg text-[9px] flex items-center gap-0.5 transition-colors"
+                              className="bg-[white] hover:bg-[white] text-[#A97E16] font-bold px-2 py-1 rounded-lg text-[9px] flex items-center gap-0.5 transition-colors"
                               title="Track courier riding to restaurant (Pickup)"
                             >
                               <span>🏬 Pickup</span>
@@ -490,7 +490,7 @@ export default function DeliveryManagement() {
                               href={order.delivery_tracking_url || `https://borzodelivery.com/in/track/${order.delivery_job_id.toString().replace(/^BRZ-/, '')}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-[white] hover:bg-[white] text-[#F15A25] font-bold px-2 py-1 rounded-lg text-[9px] flex items-center gap-0.5 transition-colors"
+                              className="bg-[white] hover:bg-[white] text-[#A97E16] font-bold px-2 py-1 rounded-lg text-[9px] flex items-center gap-0.5 transition-colors"
                               title="Track courier riding to customer (Drop)"
                             >
                               <span>🏠 Drop</span>
@@ -505,7 +505,7 @@ export default function DeliveryManagement() {
                       {/* 7. Action Button */}
                       <td className="py-3.5 px-4 sm:px-6 whitespace-nowrap text-right">
                         {isCancelled ? (
-                          <span className="text-[10px] text-[#F15A25] font-bold bg-[white] border border-[#F15A25] px-2 py-1 rounded-lg">
+                          <span className="text-[10px] text-[#A97E16] font-bold bg-[white] border border-[#A97E16] px-2 py-1 rounded-lg">
                             Cancelled
                           </span>
                         ) : !isBooked ? (
@@ -530,12 +530,12 @@ export default function DeliveryManagement() {
                           <button
                             onClick={() => handleCancelBorzoRider(order)}
                             disabled={bookingLoading[orderId]}
-                            className="text-[10px] text-[#F15A25] hover:text-[#F15A25] bg-[white] hover:bg-[white] border border-[#F15A25] font-bold px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                            className="text-[10px] text-[#A97E16] hover:text-[#A97E16] bg-[white] hover:bg-[white] border border-[#A97E16] font-bold px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                           >
                             Cancel
                           </button>
                         ) : (
-                          <span className="text-[10px] text-[#F15A25] font-bold">Completed</span>
+                          <span className="text-[10px] text-[#A97E16] font-bold">Completed</span>
                         )}
                       </td>
                     </tr>

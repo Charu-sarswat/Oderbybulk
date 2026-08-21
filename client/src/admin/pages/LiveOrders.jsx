@@ -386,7 +386,7 @@ export default function LiveOrders() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Clock className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -396,7 +396,7 @@ export default function LiveOrders() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#A97E16] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Play className="w-5 h-5 fill-orange-600" />
           </div>
           <div className="min-w-0 flex-1">
@@ -408,7 +408,7 @@ export default function LiveOrders() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -473,7 +473,7 @@ export default function LiveOrders() {
 
         {filteredOrders.length === 0 ? (
           <div className="text-center py-20 border border-[#141B20] rounded-2xl p-8 max-w-lg mx-auto my-6">
-            <CheckCircle2 className="w-16 h-16 text-[#F15A25] mx-auto mb-4" />
+            <CheckCircle2 className="w-16 h-16 text-[#A97E16] mx-auto mb-4" />
             <h3 className="font-serif font-bold text-xl text-[#141B20] mb-1">Kitchen Queue Clear</h3>
             <p className="text-sm text-[#141B20]">No active customer tickets matching current filters.</p>
           </div>
@@ -500,24 +500,24 @@ export default function LiveOrders() {
                     <tr 
                       key={order.id} 
                       className={`hover:bg-[white] transition-colors ${
-                        order.status === 'hold' ? 'bg-orange-50/40 border-l-4 border-orange-400' : isDelayed ? 'bg-[white]' : ''
+                        order.status === 'hold' ? 'bg-[#A97E16]/40 border-l-4 border-[#A97E16]' : isDelayed ? 'bg-[white]' : ''
                       }`}
                     >
                       {/* Ticket ID */}
                       <td className="py-4 px-4 sm:px-6">
                         <span className="font-bold text-[#141B20] block whitespace-nowrap">#{order.order_number || order.id} [{order.service_type || 'FOOD'}]</span>
                         {order.status === 'hold' && (
-                          <span className="bg-orange-100 text-orange-800 text-[8px] font-black px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-orange-200 block w-max animate-pulse">
+                          <span className="bg-[#A97E16] text-[#A97E16] text-[8px] font-black px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-[#A97E16] block w-max animate-pulse">
                             ⏸️ On Hold
                           </span>
                         )}
                         {order.scheduled_time && (
-                          <span className="bg-[white] text-[#F15A25] text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-[#F15A25] block w-max">
+                          <span className="bg-[white] text-[#A97E16] text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-[#A97E16] block w-max">
                             📅 {new Date(order.scheduled_time).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}
                           </span>
                         )}
                         {isDelayed && order.status !== 'hold' && (
-                          <span className="bg-[white] text-[#F15A25] text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-[#F15A25] block w-max">
+                          <span className="bg-[white] text-[#A97E16] text-[8px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block uppercase border border-[#A97E16] block w-max">
                             Urgent / Delay
                           </span>
                         )}
@@ -531,7 +531,7 @@ export default function LiveOrders() {
                         {order.delivery_address && (
                           <div className="mt-1.5">
                             {expandedAddresses[order.id] ? (
-                              <div className="text-[10px] text-[#141B20] bg-[white] border border-[#F15A25] rounded p-1.5 font-semibold max-w-[200px] break-words relative">
+                              <div className="text-[10px] text-[#141B20] bg-[white] border border-[#A97E16] rounded p-1.5 font-semibold max-w-[200px] break-words relative">
                                 <span>📍 {order.delivery_address}</span>
                                 <button
                                   onClick={() => setExpandedAddresses(prev => ({ ...prev, [order.id]: false }))}
@@ -543,7 +543,7 @@ export default function LiveOrders() {
                             ) : (
                               <button
                                 onClick={() => setExpandedAddresses(prev => ({ ...prev, [order.id]: true }))}
-                                className="text-[9px] text-[#141B20] bg-[white] border border-[#F15A25] hover:bg-[white] rounded px-1.5 py-0.5 font-semibold cursor-pointer flex items-center gap-1 transition-all"
+                                className="text-[9px] text-[#141B20] bg-[white] border border-[#A97E16] hover:bg-[white] rounded px-1.5 py-0.5 font-semibold cursor-pointer flex items-center gap-1 transition-all"
                                 title="Click to show address"
                               >
                                 <span>📍 Show Address</span>
@@ -559,8 +559,8 @@ export default function LiveOrders() {
                         {/* Payment Info */}
                         <span className={`inline-block text-[9px] font-bold px-1.5 py-0.5 rounded uppercase mt-1.5 border ${
                           order.payment_status === 'paid' 
-                            ? 'bg-[white] text-[#F15A25] border-[#F15A25]' 
-                            : 'bg-[white] text-[#F15A25] border-[#F15A25]'
+                            ? 'bg-[white] text-[#A97E16] border-[#A97E16]' 
+                            : 'bg-[white] text-[#A97E16] border-[#A97E16]'
                         }`}>
                           💳 {order.payment_method === 'cash' ? 'Cash' : order.payment_method === 'card' ? 'Card' : order.payment_method === 'cod' ? 'COD' : 'UPI'} ({order.payment_status})
                         </span>
@@ -589,7 +589,7 @@ export default function LiveOrders() {
                                   onClick={() => setCompletedItems(prev => ({ ...prev, [itemKey]: !prev[itemKey] }))}
                                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer select-none active:scale-95 ${
                                     isDone 
-                                      ? 'bg-[white] text-[#F15A25] border-[#F15A25] line-through opacity-55' 
+                                      ? 'bg-[white] text-[#A97E16] border-[#A97E16] line-through opacity-55' 
                                       : 'bg-neutral-50 hover:bg-neutral-100 text-[#141B20] border-[#141B20] shadow-sm'
                                   }`}
                                 >
@@ -608,7 +608,7 @@ export default function LiveOrders() {
                       {/* Notes */}
                       <td className="py-4 px-4 sm:px-6 text-xs text-[#141B20] font-normal">
                         {order.notes ? (
-                          <div className="bg-[white] border border-[#F15A25] p-2 rounded-xl text-[#F15A25] text-[11px]">
+                          <div className="bg-[white] border border-[#A97E16] p-2 rounded-xl text-[#A97E16] text-[11px]">
                             📝 {order.notes}
                           </div>
                         ) : (
@@ -624,7 +624,7 @@ export default function LiveOrders() {
                             {order.status === 'hold' && (
                               <button
                                 onClick={() => updateOrderStatus(order.id, 'preparing')}
-                                className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm shrink-0"
+                                className="bg-[#A97E16] hover:bg-[#A97E16] text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm shrink-0"
                               >
                                 Release & Prepare
                               </button>
@@ -642,7 +642,7 @@ export default function LiveOrders() {
                             {order.status === 'preparing' && (
                               <button
                                 onClick={() => updateOrderStatus(order.id, 'ready')}
-                                className="bg-[#F15A25] hover:brightness-110 text-white font-bold py-1.5 px-3.5 rounded-xl text-xs transition-colors cursor-pointer shadow-sm shrink-0 border-0"
+                                className="bg-[#A97E16] hover:brightness-110 text-white font-bold py-1.5 px-3.5 rounded-xl text-xs transition-colors cursor-pointer shadow-sm shrink-0 border-0"
                               >
                                 Mark Ready
                               </button>
@@ -652,7 +652,7 @@ export default function LiveOrders() {
                               order.order_channel === 'delivery' ? (
                                 <button
                                   onClick={() => updateOrderStatus(order.id, 'out_for_delivery')}
-                                  className="bg-[#F15A25] hover:brightness-110 text-white font-black py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 flex items-center gap-1 border-0"
+                                  className="bg-[#A97E16] hover:brightness-110 text-white font-black py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 flex items-center gap-1 border-0"
                                 >
                                   <Bike className="w-3.5 h-3.5" />
                                   <span>Out For Delivery</span>
@@ -660,7 +660,7 @@ export default function LiveOrders() {
                               ) : (
                                 <button
                                   onClick={() => updateOrderStatus(order.id, 'served')}
-                                  className="bg-[#F15A25] hover:brightness-110 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 border-0"
+                                  className="bg-[#A97E16] hover:brightness-110 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 border-0"
                                 >
                                   Complete / Served
                                 </button>
@@ -670,7 +670,7 @@ export default function LiveOrders() {
                             {order.status === 'out_for_delivery' && (
                               <button
                                 onClick={() => updateOrderStatus(order.id, 'delivered')}
-                                className="bg-[#F15A25] hover:brightness-110 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 border-0"
+                                className="bg-[#A97E16] hover:brightness-110 text-white font-bold py-1.5 px-3 rounded-xl text-xs transition-colors cursor-pointer shadow-sm uppercase tracking-wider shrink-0 border-0"
                               >
                                 Mark Delivered
                               </button>
@@ -684,7 +684,7 @@ export default function LiveOrders() {
                                     updateOrderStatus(order.id, 'cancelled');
                                   }
                                 }}
-                                className="bg-[white] hover:bg-[white] text-[#141B20] hover:text-[#F15A25] border border-[#141B20] hover:border-[#F15A25] p-1.5 rounded-xl transition-colors cursor-pointer shrink-0"
+                                className="bg-[white] hover:bg-[white] text-[#141B20] hover:text-[#A97E16] border border-[#141B20] hover:border-[#A97E16] p-1.5 rounded-xl transition-colors cursor-pointer shrink-0"
                                 title="Cancel Order"
                               >
                                 <XCircle className="w-4 h-4" />
@@ -698,7 +698,7 @@ export default function LiveOrders() {
                               to={`/admin/deliveries?order=${order.order_number || order.id}`}
                               className={`w-full max-w-[150px] py-1 px-2.5 rounded-xl text-[10px] font-black transition-colors cursor-pointer shadow-2xs flex items-center justify-center gap-1 ${
                                 order.delivery_job_id
-                                  ? 'bg-[white] hover:bg-[white] text-[#F15A25] border border-[#F15A25]'
+                                  ? 'bg-[white] hover:bg-[white] text-[#A97E16] border border-[#A97E16]'
                                   : 'bg-[#141B20] hover:bg-[#141B20] text-[white]'
                               }`}
                               title="Open Delivery Management Page"

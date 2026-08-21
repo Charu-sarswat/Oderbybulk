@@ -349,7 +349,7 @@ export default function InventoryManagement() {
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Boxes className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -363,7 +363,7 @@ export default function InventoryManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -375,7 +375,7 @@ export default function InventoryManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <XCircle className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -493,12 +493,12 @@ export default function InventoryManagement() {
                             <div>
                               <span>{item.name}</span>
                               {isUnlimited && (
-                                <span className="ml-2 text-[10px] text-[#F15A25] font-black bg-[white] px-1.5 py-0.5 rounded border border-[#F15A25]">
+                                <span className="ml-2 text-[10px] text-[#A97E16] font-black bg-[white] px-1.5 py-0.5 rounded border border-[#A97E16]">
                                   ♾️ Unlimited Stock
                                 </span>
                               )}
                               {!item.is_available && !isUnlimited && (
-                                <span className="ml-2 text-[10px] text-[#F15A25] font-bold bg-[white] px-1.5 py-0.5 rounded border border-[#F15A25]">
+                                <span className="ml-2 text-[10px] text-[#A97E16] font-bold bg-[white] px-1.5 py-0.5 rounded border border-[#A97E16]">
                                   Disabled in Menu
                                 </span>
                               )}
@@ -511,7 +511,7 @@ export default function InventoryManagement() {
                           </td>
                           <td className="py-4 px-4 sm:px-6 text-center font-serif text-base font-bold text-[#141B20]">
                             {isUnlimited ? (
-                              <span className="text-[#F15A25] font-black text-xs">Always In Stock</span>
+                              <span className="text-[#A97E16] font-black text-xs">Always In Stock</span>
                             ) : (
                               <>{item.stock_quantity} <span className="text-xs text-[#141B20] font-normal">{item.unit || 'portions'}</span></>
                             )}
@@ -521,10 +521,10 @@ export default function InventoryManagement() {
                           </td>
                           <td className="py-4 px-4 sm:px-6 text-center">
                             <span className={`text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full flex items-center justify-center gap-1 w-max mx-auto ${
-                              isUnlimited ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                              isOut ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                              isLow ? 'bg-[white] text-[#F15A25] border border-[#F15A25] animate-pulse' :
-                              'bg-[white] text-[#F15A25] border border-[#F15A25]'
+                              isUnlimited ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                              isOut ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                              isLow ? 'bg-[white] text-[#A97E16] border border-[#A97E16] animate-pulse' :
+                              'bg-[white] text-[#A97E16] border border-[#A97E16]'
                             }`}>
                               {isUnlimited ? '♾️ Unlimited' : isOut ? 'Out of Stock' : isLow ? 'Low Stock' : 'In Stock'}
                             </span>
@@ -622,9 +622,9 @@ export default function InventoryManagement() {
                           </td>
                           <td className="py-4 px-4 sm:px-6 text-center">
                             <span className={`text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full flex items-center justify-center gap-1 w-max mx-auto ${
-                              isOut ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                              isLow ? 'bg-[white] text-[#F15A25] border border-[#F15A25] animate-pulse' :
-                              'bg-[white] text-[#F15A25] border border-[#F15A25]'
+                              isOut ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                              isLow ? 'bg-[white] text-[#A97E16] border border-[#A97E16] animate-pulse' :
+                              'bg-[white] text-[#A97E16] border border-[#A97E16]'
                             }`}>
                               {isOut ? 'Out of Stock' : isLow ? 'Low Stock' : 'In Stock'}
                             </span>
@@ -647,7 +647,7 @@ export default function InventoryManagement() {
                               </button>
                               <button
                                 onClick={() => handleDeleteRawMaterial(item._id || item.id, item.name)}
-                                className="p-1.5 bg-[white] hover:bg-[white] text-[#F15A25] rounded-lg transition-colors cursor-pointer"
+                                className="p-1.5 bg-[white] hover:bg-[white] text-[#A97E16] rounded-lg transition-colors cursor-pointer"
                                 title="Delete"
                               >
                                 <X className="w-4 h-4" />
@@ -746,9 +746,9 @@ export default function InventoryManagement() {
 
                         <td className="py-4 px-4 sm:px-6 text-center">
                           <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-md ${
-                            log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                            log.change_type === 'STOCK_ADD' || log.change_type === 'RESTOCK' ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                            log.change_type === 'STOCK_SUB' || log.change_type === 'WASTAGE' ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' : 'bg-[white] text-[#141B20]'
+                            log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                            log.change_type === 'STOCK_ADD' || log.change_type === 'RESTOCK' ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                            log.change_type === 'STOCK_SUB' || log.change_type === 'WASTAGE' ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' : 'bg-[white] text-[#141B20]'
                           }`}>
                             {log.change_type.replace(/_/g, ' ')}
                           </span>
@@ -756,7 +756,7 @@ export default function InventoryManagement() {
 
                         <td className="py-4 px-4 sm:px-6 text-center">
                           <span className={`font-serif font-bold text-sm inline-flex items-center gap-1 ${
-                            isPositive ? 'text-[#F15A25]' : 'text-[#F15A25]'
+                            isPositive ? 'text-[#A97E16]' : 'text-[#A97E16]'
                           }`}>
                             {isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
                             {isPositive ? `+${log.quantity_change}` : log.quantity_change}
@@ -1018,8 +1018,8 @@ export default function InventoryManagement() {
                           })}
                         </span>
                         <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${
-                          log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                          isPositive ? 'bg-[white] text-[#F15A25]' : 'bg-[white] text-[#F15A25]'
+                          log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                          isPositive ? 'bg-[white] text-[#A97E16]' : 'bg-[white] text-[#A97E16]'
                         }`}>
                           {log.change_type === 'ORDER_DEDUCT' ? 'Auto-Deduct' : log.change_type.replace(/_/g, ' ')}
                         </span>
@@ -1177,8 +1177,8 @@ export default function InventoryManagement() {
                           })}
                         </span>
                         <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${
-                          log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#F15A25] border border-[#F15A25]' :
-                          isPositive ? 'bg-[white] text-[#F15A25]' : 'bg-[white] text-[#F15A25]'
+                          log.change_type === 'ORDER_DEDUCT' ? 'bg-[white] text-[#A97E16] border border-[#A97E16]' :
+                          isPositive ? 'bg-[white] text-[#A97E16]' : 'bg-[white] text-[#A97E16]'
                         }`}>
                           {log.change_type === 'ORDER_DEDUCT' ? 'Order Auto-Deduct' : log.change_type.replace(/_/g, ' ')}
                         </span>

@@ -601,7 +601,7 @@ export default function OrderStatus() {
 
           <a
             href={`tel:${restaurantConfig.supportPhone}`}
-            className="flex items-center justify-center gap-2 bg-[#F15A25] hover:brightness-110 text-[white] font-black py-3 px-4 rounded-xl text-xs transition-colors text-center cursor-pointer shadow-sm"
+            className="flex items-center justify-center gap-2 bg-[#A97E16] hover:brightness-110 text-[white] font-black py-3 px-4 rounded-xl text-xs transition-colors text-center cursor-pointer shadow-sm"
           >
             <PhoneCall className="w-4 h-4 text-[white]" />
             <span>Call Support</span>

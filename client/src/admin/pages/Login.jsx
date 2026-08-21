@@ -6,7 +6,7 @@ import { Lock, User, AlertCircle, ShieldCheck } from 'lucide-react';
 import { restaurantConfig } from '../../config/restaurant';
 
 // Brand Logo
-const logoFull = '/lok.png';
+const logoFull = '/l2.png';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export default function Login() {
           <h2 className="text-lg font-serif font-black text-[#141B20] mb-6">System Authentication</h2>
 
           {authError && (
-            <div className="mb-6 bg-[white] border border-[#F15A25] text-[#141B20] p-4 rounded-2xl text-xs flex items-center gap-2">
+            <div className="mb-6 bg-[white] border border-[#A97E16] text-[#141B20] p-4 rounded-2xl text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-[#141B20]" />
               <span>{authError}</span>
             </div>
@@ -75,8 +75,8 @@ export default function Login() {
               <label className="text-[10px] font-extrabold text-[#141B20] uppercase tracking-widest block mb-2">
                 Username
               </label>
-              <div className="flex items-center bg-white border border-[#141B20]/20 rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-[#F15A25]/50 focus-within:border-[#F15A25] transition-all">
-                <User className="w-4.5 h-4.5 text-[#F15A25] mr-3 shrink-0" />
+              <div className="flex items-center bg-white border border-[#141B20]/20 rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-[#A97E16]/50 focus-within:border-[#A97E16] transition-all">
+                <User className="w-4.5 h-4.5 text-[#A97E16] mr-3 shrink-0" />
                 <input
                   type="text"
                   value={username}
@@ -92,8 +92,8 @@ export default function Login() {
               <label className="text-[10px] font-extrabold text-[#141B20] uppercase tracking-widest block mb-2">
                 Password
               </label>
-              <div className="flex items-center bg-white border border-[#141B20]/20 rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-[#F15A25]/50 focus-within:border-[#F15A25] transition-all">
-                <Lock className="w-4.5 h-4.5 text-[#F15A25] mr-3 shrink-0" />
+              <div className="flex items-center bg-white border border-[#141B20]/20 rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-[#A97E16]/50 focus-within:border-[#A97E16] transition-all">
+                <Lock className="w-4.5 h-4.5 text-[#A97E16] mr-3 shrink-0" />
                 <input
                   type="password"
                   value={password}
@@ -108,7 +108,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#F15A25] hover:brightness-110 disabled:opacity-50 text-white font-black py-4 rounded-2xl shadow-xl shadow-[#F15A25]/20 transition-all cursor-pointer flex items-center justify-center gap-2 text-xs uppercase tracking-wider mt-2"
+              className="w-full bg-[#A97E16] hover:brightness-110 disabled:opacity-50 text-white font-black py-4 rounded-2xl shadow-xl shadow-[#A97E16]/20 transition-all cursor-pointer flex items-center justify-center gap-2 text-xs uppercase tracking-wider mt-2"
             >
               {loading ? (
                 <>

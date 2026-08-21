@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { 
   MapPin, Phone, Clock, Instagram, Send, ExternalLink, 
   ShieldCheck, Utensils, Award, Heart, CheckCircle2,
-  Facebook, Twitter, Youtube, Link as LinkIcon
+  Link as LinkIcon
 } from 'lucide-react';
 import { restaurantData } from '../../config/restaurantData';
-const logoBanner = '/lok.png';
+const logoBanner = '/l2.png';
 import WhatsAppIcon from './WhatsAppIcon';
+import { InstagramIcon, FacebookIcon, XIcon, YoutubeIcon, ThreadsIcon, PinterestIcon } from './SocialIcons';
 
 export default function Footer({ onOpenCatering }) {
   const handleWhatsAppChat = () => {
@@ -18,7 +19,7 @@ export default function Footer({ onOpenCatering }) {
   return (
     <footer className="bg-white text-[#141B20] border-t border-[#141B20]/10 relative overflow-hidden font-sans">
       {/* Top Gold Border Highlight */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#F15A25]/20 via-[#F15A25] to-[#F15A25]/20" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#A97E16]/20 via-[#A97E16] to-[#A97E16]/20" />
 
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-12">
@@ -45,16 +46,16 @@ export default function Footer({ onOpenCatering }) {
             </div>
 
             {/* Social Links */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2 flex flex-wrap sm:flex-wrap items-center gap-2 sm:gap-3">
               {/* Instagram */}
               <a
                 href="https://www.instagram.com/orderbybulk?igsh=MTdkbmI4cHNhMGxndg==&igsi=MTdkbmI4cHNhMGxndg=="
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Follow us on Instagram"
               >
-                <Instagram className="w-5 h-5" />
+                <InstagramIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* Facebook */}
@@ -62,10 +63,10 @@ export default function Footer({ onOpenCatering }) {
                 href="https://www.facebook.com/share/1GS5PpauNB/"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Follow us on Facebook"
               >
-                <Facebook className="w-5 h-5" />
+                <FacebookIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* X (Twitter) */}
@@ -73,10 +74,10 @@ export default function Footer({ onOpenCatering }) {
                 href="https://x.com/OrderByBulk"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Follow us on X"
               >
-                <Twitter className="w-5 h-5" />
+                <XIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* YouTube */}
@@ -84,10 +85,10 @@ export default function Footer({ onOpenCatering }) {
                 href="https://youtube.com/@orderbybulk?si=A5oWv_4PYEmXj9_D"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Subscribe on YouTube"
               >
-                <Youtube className="w-5 h-5" />
+                <YoutubeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* Threads */}
@@ -95,10 +96,10 @@ export default function Footer({ onOpenCatering }) {
                 href="https://www.threads.com/@orderbybulk"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md text-xs font-black"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Follow us on Threads"
               >
-                @
+                <ThreadsIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* Pinterest */}
@@ -106,19 +107,19 @@ export default function Footer({ onOpenCatering }) {
                 href="https://pin.it/3oB9FgYln"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md text-xs font-black"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md"
                 title="Follow us on Pinterest"
               >
-                P
+                <PinterestIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
 
               {/* WhatsApp (Keep existing) */}
               <button
                 onClick={handleWhatsAppChat}
-                className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md cursor-pointer"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white border-0 flex items-center justify-center transition-all shadow-md cursor-pointer"
                 title="Chat on WhatsApp"
               >
-                <WhatsAppIcon className="w-5 h-5" color="currentColor" />
+                <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5" color="currentColor" />
               </button>
             </div>
           </div>
@@ -134,13 +135,13 @@ export default function Footer({ onOpenCatering }) {
                   {link.path.startsWith('/#') ? (
                     <button 
                       onClick={onOpenCatering} 
-                      className="hover:text-[#F15A25] transition-colors cursor-pointer flex items-center gap-1.5"
+                      className="hover:text-[#A97E16] transition-colors cursor-pointer flex items-center gap-1.5"
                     >
-                      <span className="text-[#F15A25]">›</span> {link.name}
+                      <span className="text-[#A97E16]">›</span> {link.name}
                     </button>
                   ) : (
-                    <Link to={link.path} className="hover:text-[#F15A25] transition-colors flex items-center gap-1.5">
-                      <span className="text-[#F15A25]">›</span> {link.name}
+                    <Link to={link.path} className="hover:text-[#A97E16] transition-colors flex items-center gap-1.5">
+                      <span className="text-[#A97E16]">›</span> {link.name}
                     </Link>
                   )}
                 </li>
@@ -156,8 +157,8 @@ export default function Footer({ onOpenCatering }) {
             <ul className="space-y-2.5 text-xs text-[#141B20]/80">
               {restaurantData.footerSections.topSpecialties.map((item, idx) => (
                 <li key={idx}>
-                  <Link to={item.path} className="hover:text-[#F15A25] transition-colors flex items-center gap-1.5">
-                    <span className="text-[#F15A25]">›</span> {item.name}
+                  <Link to={item.path} className="hover:text-[#A97E16] transition-colors flex items-center gap-1.5">
+                    <span className="text-[#A97E16]">›</span> {item.name}
                   </Link>
                 </li>
               ))}
@@ -171,12 +172,12 @@ export default function Footer({ onOpenCatering }) {
             </h4>
             <div className="space-y-3 text-xs text-[#141B20]/80">
               <p className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#F15A25] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#A97E16] shrink-0 mt-0.5" />
                 <a 
                   href={restaurantData.gmbLink} 
                   target="_blank" 
                   rel="noreferrer" 
-                  className="hover:text-[#F15A25] hover:underline transition-colors"
+                  className="hover:text-[#A97E16] hover:underline transition-colors"
                 >
                   {restaurantData.gmbAddress}
                 </a>
@@ -188,8 +189,8 @@ export default function Footer({ onOpenCatering }) {
               </p>
 
               <p className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#F15A25] shrink-0" />
-                <a href={`tel:${restaurantData.supportPhone}`} className="hover:text-[#F15A25]">
+                <Phone className="w-4 h-4 text-[#A97E16] shrink-0" />
+                <a href={`tel:${restaurantData.supportPhone}`} className="hover:text-[#A97E16]">
                   {restaurantData.formattedPhone}
                 </a>
               </p>
@@ -199,7 +200,7 @@ export default function Footer({ onOpenCatering }) {
                   href={restaurantData.gmbLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 bg-[#F15A25] hover:brightness-110 border-0 px-3 py-2 rounded-xl text-[11px] font-bold text-white transition-all shadow-md"
+                  className="inline-flex items-center gap-1.5 bg-[#A97E16] hover:brightness-110 border-0 px-3 py-2 rounded-xl text-[11px] font-bold text-white transition-all shadow-md"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Google Maps Location</span>
@@ -224,7 +225,7 @@ export default function Footer({ onOpenCatering }) {
               href={restaurantData.developerUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-[#141B20] hover:text-[#F15A25] hover:underline font-bold transition-colors"
+              className="text-[#141B20] hover:text-[#A97E16] hover:underline font-bold transition-colors"
             >
               {restaurantData.developerCompany}
             </a>

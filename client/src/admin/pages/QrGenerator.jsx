@@ -3,8 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { QrCode, Download, Printer, Settings, RefreshCw, CheckCircle } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
-const logoIcon = '/lok.png';
-const logoFull = '/lok.png';
+const logoIcon = '/l2.png';
+const logoFull = '/l2.png';
 
 export default function QrGenerator() {
   const { token } = useAuth();
@@ -476,7 +476,7 @@ export default function QrGenerator() {
             </div>
 
             {/* Logo Overlay */}
-            <div className="flex items-center justify-between py-2 border-t border-[#F15A25]">
+            <div className="flex items-center justify-between py-2 border-t border-[#A97E16]">
               <div>
                 <label className="block text-[11px] font-black uppercase text-[#141B20] tracking-wider">
                   Brand Logo Overlay
@@ -510,8 +510,8 @@ export default function QrGenerator() {
             </div>
 
             {/* Scan URL Indicator */}
-            <div className="bg-[white] border border-[#F15A25] p-3.5 rounded-2xl space-y-1">
-              <span className="text-[10px] text-[#F15A25] font-bold uppercase tracking-wider block">Target Scan URL:</span>
+            <div className="bg-[white] border border-[#A97E16] p-3.5 rounded-2xl space-y-1">
+              <span className="text-[10px] text-[#A97E16] font-bold uppercase tracking-wider block">Target Scan URL:</span>
               <code className="text-[10px] text-[#141B20] break-all select-all font-mono font-medium block">
                 {targetUrl}
               </code>

@@ -5,9 +5,9 @@ function replaceInFile(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   let changed = false;
   
-  if (content.match(/#3c110d/i) || content.match(/#f8a324/i)) {
+  if (content.match(/#3c110d/i) || content.match(/#A97E16/i)) {
     content = content.replace(/#3c110d/gi, '#181817');
-    content = content.replace(/#f8a324/gi, '#D4D4D0');
+    content = content.replace(/#A97E16/gi, '#D4D4D0');
     fs.writeFileSync(filePath, content, 'utf8');
     changed = true;
   }

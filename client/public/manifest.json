@@ -4,13 +4,13 @@
   "description": "Hyderabad's favourite authentic Mumbai chat. 100% Pure Veg.",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/l1.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/logo.png",
+      "src": "/l1.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"

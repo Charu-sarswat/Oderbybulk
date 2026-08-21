@@ -8,7 +8,7 @@ import { useCustomerAuth } from '../../context/CustomerAuthContext';
 import { useCustomerUI } from '../../context/CustomerUIContext';
 import { restaurantData } from '../../config/restaurantData';
 import WhatsAppIcon from './WhatsAppIcon';
-const logoBanner = '/lok.png';
+const logoBanner = '/l2.png';
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -52,7 +52,7 @@ export default function Header() {
             {/* History Link */}
             <button
               onClick={() => setIsHistoryOpen(true)}
-              className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+              className="w-10 h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
               title="Order History"
             >
               <History className="w-5 h-5" />
@@ -61,7 +61,7 @@ export default function Header() {
             {/* Cart Trigger */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
+              className="relative w-10 h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
               title="View Cart"
             >
               <ShoppingCart className="w-5 h-5" />
@@ -75,21 +75,21 @@ export default function Header() {
             {/* Profile / Log In */}
             {customerUser ? (
               <div className="flex items-center gap-1">
-                <Link to="/account" className="hidden sm:flex items-center gap-1 bg-white hover:bg-gray-50 px-3 py-2 rounded-xl text-xs font-semibold text-[#F15A25] transition-all shadow-md">
-                  <UserCircle className="w-4 h-4 text-[#F15A25]" />
+                <Link to="/account" className="hidden sm:flex items-center gap-1 bg-white hover:bg-gray-50 px-3 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
+                  <UserCircle className="w-4 h-4 text-[#A97E16]" />
                   <span>{customerUser.name.split(' ')[0]}</span>
                 </Link>
                 <button
                   onClick={() => setShowConfirmLogout(true)}
-                  className="w-10 h-10 rounded-xl bg-[#F15A25] hover:brightness-110 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+                  className="w-10 h-10 rounded-xl bg-[#A97E16] hover:brightness-110 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
                   title="Logout"
                 >
                   <LogOut className="w-4 h-4 text-white" />
                 </button>
               </div>
             ) : (
-              <Link to="/account" className="flex items-center gap-1 bg-white hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#F15A25] transition-all shadow-md">
-                <UserCircle className="w-4 h-4 text-[#F15A25]" />
+              <Link to="/account" className="flex items-center gap-1 bg-white hover:bg-gray-50 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#A97E16] transition-all shadow-md">
+                <UserCircle className="w-4 h-4 text-[#A97E16]" />
                 <span className="hidden sm:inline">Sign In</span>
               </Link>
             )}
@@ -110,13 +110,13 @@ export default function Header() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowConfirmLogout(false)}
-                  className="flex-1 py-3 bg-[#F15A25]/10 hover:bg-[#F15A25] text-[#141B20] hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border border-[#F15A25]"
+                  className="flex-1 py-3 bg-[#A97E16]/10 hover:bg-[#A97E16] text-[#141B20] hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border border-[#A97E16]"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmLogoutAction}
-                  className="flex-1 py-3 bg-[#F15A25] hover:brightness-110 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-md"
+                  className="flex-1 py-3 bg-[#A97E16] hover:brightness-110 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-md"
                 >
                   Log Out
                 </button>
@@ -145,11 +145,11 @@ export default function Header() {
         {/* Center Navigation Links (Only shown on Landing page) */}
         {!isMenuPage && pathname === '/' && (
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm lg:text-base font-bold text-[#141B20]/80">
-            <a href="#hero" className="hover:text-[#F15A25] transition-colors">Home</a>
-            <a href="#products" className="hover:text-[#F15A25] transition-colors">Bestsellers</a>
-            <a href="#reels" className="hover:text-[#F15A25] transition-colors">Insta Reels</a>
-            <a href="#catering" className="hover:text-[#F15A25] transition-colors">Party & Catering</a>
-            <a href="#contact" className="hover:text-[#F15A25] transition-colors">Contact & Map</a>
+            <a href="#hero" className="hover:text-[#A97E16] transition-colors">Home</a>
+            <a href="#products" className="hover:text-[#A97E16] transition-colors">Bestsellers</a>
+            <a href="#reels" className="hover:text-[#A97E16] transition-colors">Insta Reels</a>
+            <a href="#catering" className="hover:text-[#A97E16] transition-colors">Party & Catering</a>
+            <a href="#contact" className="hover:text-[#A97E16] transition-colors">Contact & Map</a>
           </nav>
         )}
 
@@ -158,12 +158,12 @@ export default function Header() {
 
 
           {customerUser ? (
-            <Link to="/account" className="flex items-center gap-1.5 bg-[#F15A25] hover:brightness-110 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-white transition-all shadow-md">
+            <Link to="/account" className="flex items-center gap-1.5 bg-[#A97E16] hover:brightness-110 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-white transition-all shadow-md">
               <UserCircle className="w-4 h-4 text-white" />
               <span className="hidden sm:inline">{customerUser.name.split(' ')[0]}</span>
             </Link>
           ) : (
-            <Link to="/account" className="flex items-center gap-1.5 bg-[#F15A25] hover:brightness-110 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-white transition-all shadow-md">
+            <Link to="/account" className="flex items-center gap-1.5 bg-[#A97E16] hover:brightness-110 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-white transition-all shadow-md">
               <UserCircle className="w-4 h-4 text-white" />
               <span className="hidden sm:inline">Sign In</span>
             </Link>
@@ -185,13 +185,13 @@ export default function Header() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConfirmLogout(false)}
-                className="flex-1 py-3 bg-[#F15A25]/10 hover:bg-[#F15A25] text-[#141B20] hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border border-[#F15A25]"
+                className="flex-1 py-3 bg-[#A97E16]/10 hover:bg-[#A97E16] text-[#141B20] hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border border-[#A97E16]"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmLogoutAction}
-                className="flex-1 py-3 bg-[#F15A25] hover:brightness-110 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-md"
+                className="flex-1 py-3 bg-[#A97E16] hover:brightness-110 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer shadow-md"
               >
                 Log Out
               </button>

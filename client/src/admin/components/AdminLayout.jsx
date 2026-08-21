@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 
 // Brand Logos
-const logoIcon = '/lok.png';
-const logoBanner = '/lok.png';
+const logoIcon = '/l2.png';
+const logoBanner = '/l2.png';
 
 /** Shared sidebar nav content — renders inside both desktop aside & mobile drawer */
 function SidebarContent({ user, navLinks, location, isCollapsed, handleLogout, onLinkClick }) {
@@ -39,7 +39,7 @@ function SidebarContent({ user, navLinks, location, isCollapsed, handleLogout, o
               onClick={onLinkClick}
               className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-extrabold transition-all ${
                 isActive
-                  ? 'bg-[#F15A25] text-white'
+                  ? 'bg-[#A97E16] text-white'
                   : 'text-[#141B20]/70 hover:text-[#141B20] hover:bg-[#141B20]/5'
               } ${isCollapsed ? 'justify-center' : ''}`}
               title={isCollapsed ? link.name : ''}
@@ -60,7 +60,7 @@ function SidebarContent({ user, navLinks, location, isCollapsed, handleLogout, o
           {!isCollapsed && (
             <div className="min-w-0">
               <p className="text-xs font-extrabold text-[#141B20] truncate">{user.username}</p>
-              <span className="flex items-center gap-1 text-[9px] text-[#F15A25] font-extrabold uppercase tracking-wider">
+              <span className="flex items-center gap-1 text-[9px] text-[#A97E16] font-extrabold uppercase tracking-wider">
                 <Shield className="w-2.5 h-2.5" />
                 {user.role}
               </span>
@@ -69,12 +69,12 @@ function SidebarContent({ user, navLinks, location, isCollapsed, handleLogout, o
         </div>
         <button
           onClick={handleLogout}
-          className={`w-full flex items-center justify-center gap-2 bg-[#141B20]/5 hover:bg-[#F15A25] group text-[#141B20] hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-[#141B20]/10 hover:border-[#F15A25] cursor-pointer ${
+          className={`w-full flex items-center justify-center gap-2 bg-[#141B20]/5 hover:bg-[#A97E16] group text-[#141B20] hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-[#141B20]/10 hover:border-[#A97E16] cursor-pointer ${
             isCollapsed ? 'px-0' : ''
           }`}
           title={isCollapsed ? 'Sign Out' : ''}
         >
-          <LogOut className="w-4 h-4 shrink-0 text-[#F15A25] group-hover:text-white" />
+          <LogOut className="w-4 h-4 shrink-0 text-[#A97E16] group-hover:text-white" />
           {!isCollapsed && <span>Sign Out</span>}
         </button>
 
@@ -467,7 +467,7 @@ export default function AdminLayout() {
             {unhandledCount > 0 && (
               <button
                 onClick={() => navigate('/admin/live-orders')}
-                className="bg-[white] border border-[#F15A25] text-[#141B20] hover:bg-[white] px-2 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-black flex items-center gap-1 sm:gap-1.5 animate-pulse cursor-pointer shrink-0"
+                className="bg-[white] border border-[#A97E16] text-[#141B20] hover:bg-[white] px-2 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-black flex items-center gap-1 sm:gap-1.5 animate-pulse cursor-pointer shrink-0"
                 title="Click to view unhandled incoming orders"
               >
                 <BellRing className="w-3.5 h-3.5 text-[#141B20] shrink-0" />
@@ -546,7 +546,7 @@ export default function AdminLayout() {
                   ? 'bg-[white]/5 border-white/10 text-[#141B20] hover:text-white'
                   : unhandledCount > 0
                   ? 'bg-[white] text-[#141B20] border-[white] font-black shadow-md animate-bounce'
-                  : 'bg-[white] border-[#F15A25] text-[#141B20] hover:bg-[white]'
+                  : 'bg-[white] border-[#A97E16] text-[#141B20] hover:bg-[white]'
               }`}
               title={buzzerMuted ? "Unmute Order Alert Sound" : "Mute Order Alert Sound"}
             >

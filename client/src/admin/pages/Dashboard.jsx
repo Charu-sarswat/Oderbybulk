@@ -37,10 +37,10 @@ export default function Dashboard() {
 
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  const CATEGORY_COLORS = ['#F15A25', '#141B20', '#FB923C', '#4B5563', '#9CA3AF', '#1F2937'];
+  const CATEGORY_COLORS = ['#A97E16', '#141B20', '#A97E16', '#4B5563', '#9CA3AF', '#1F2937'];
   const PAYMENT_COLORS = {
     COUNTER: '#141B20',
-    UPI: '#F15A25',
+    UPI: '#A97E16',
     ONLINE: '#3B82F6',
     CARD: '#10B981'
   };
@@ -138,13 +138,13 @@ export default function Dashboard() {
               title={subscription ? 'Disable Push Notifications' : 'Enable Push Notifications'}
               className={`flex items-center justify-center gap-1.5 font-bold px-2.5 py-1.5 sm:py-2 rounded-xl text-xs shadow-xs cursor-pointer disabled:opacity-50 shrink-0 transition-all ${
                 subscription 
-                  ? 'bg-[white] border border-[#F15A25] text-[#F15A25] hover:bg-[white]' 
+                  ? 'bg-[white] border border-[#A97E16] text-[#A97E16] hover:bg-[white]' 
                   : 'bg-[white] border border-[#141B20] text-[#141B20] hover:bg-[white]'
               }`}
             >
               {subscription ? (
                 <>
-                  <Bell className="w-3.5 h-3.5 text-[#F15A25] animate-bounce" />
+                  <Bell className="w-3.5 h-3.5 text-[#A97E16] animate-bounce" />
                   <span className="hidden sm:inline">Alerts Active</span>
                 </>
               ) : (
@@ -171,7 +171,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
         {/* KPI 1: Gross Sales */}
         <div className="bg-[white] p-2.5 sm:p-4 rounded-xl border border-[#141B20] shadow-xs flex items-center gap-2 sm:gap-3 hover:shadow-sm transition-all">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#F15A25] text-[#141B20] flex items-center justify-center font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#A97E16] text-[#141B20] flex items-center justify-center font-bold shrink-0">
             <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -179,11 +179,11 @@ export default function Dashboard() {
             <div className="text-sm sm:text-xl font-black text-[#141B20] font-serif mt-0.5 truncate">{restaurantConfig.currency}{parseFloat(metrics.totalSales).toFixed(0)}</div>
             <div className="mt-0.5 flex items-center gap-0.5 text-[9px] font-semibold">
               {metrics.salesGrowth >= 0 ? (
-                <span className="text-[#F15A25] flex items-center font-bold">
+                <span className="text-[#A97E16] flex items-center font-bold">
                   <ArrowUpRight className="w-2.5 h-2.5" /> +{metrics.salesGrowth}%
                 </span>
               ) : (
-                <span className="text-[#F15A25] flex items-center font-bold">
+                <span className="text-[#A97E16] flex items-center font-bold">
                   <ArrowDownRight className="w-2.5 h-2.5" /> {metrics.salesGrowth}%
                 </span>
               )}
@@ -193,7 +193,7 @@ export default function Dashboard() {
 
         {/* KPI 2: Total Orders */}
         <div className="bg-[white] p-2.5 sm:p-4 rounded-xl border border-[#141B20] shadow-xs flex items-center gap-2 sm:gap-3 hover:shadow-sm transition-all">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -205,7 +205,7 @@ export default function Dashboard() {
 
         {/* KPI 3: Avg Order Value */}
         <div className="bg-[white] p-2.5 sm:p-4 rounded-xl border border-[#141B20] shadow-xs flex items-center gap-2 sm:gap-3 hover:shadow-sm transition-all">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -217,7 +217,7 @@ export default function Dashboard() {
 
         {/* KPI 4: Diners Served */}
         <div className="bg-[white] p-2.5 sm:p-4 rounded-xl border border-[#141B20] shadow-xs flex items-center gap-2 sm:gap-3 hover:shadow-sm transition-all">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Users className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -255,8 +255,8 @@ export default function Dashboard() {
                 <AreaChart data={salesTrend}>
                   <defs>
                     <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#F15A25" stopOpacity={0.35}/>
-                      <stop offset="95%" stopColor="#F15A25" stopOpacity={0.0}/>
+                      <stop offset="5%" stopColor="#A97E16" stopOpacity={0.35}/>
+                      <stop offset="95%" stopColor="#A97E16" stopOpacity={0.0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
@@ -267,7 +267,7 @@ export default function Dashboard() {
                     labelStyle={{ fontWeight: 'bold', color: 'white', fontSize: 11 }}
                     formatter={(value) => [`${restaurantConfig.currency}${parseFloat(value).toFixed(0)}`, 'Revenue']}
                   />
-                  <Area type="monotone" dataKey="sales" name="Revenue" stroke="#F15A25" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRev)" />
+                  <Area type="monotone" dataKey="sales" name="Revenue" stroke="#A97E16" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRev)" />
                 </AreaChart>
               </ResponsiveContainer>
             )}
@@ -332,7 +332,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 shrink-0 gap-1">
             <div>
               <h3 className="font-bold text-[#141B20] text-xs sm:text-sm flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-[#F15A25]" />
+                <Clock className="w-4 h-4 text-[#A97E16]" />
                 Peak Dining Hours (Rush Hours)
               </h3>
               <p className="text-[10px] sm:text-[11px] text-[#141B20] font-medium">Ticket volume distribution throughout operating hours</p>
@@ -367,7 +367,7 @@ export default function Dashboard() {
         <div className="bg-[white] border border-[#141B20] p-4 sm:p-6 rounded-3xl shadow-xs flex flex-col h-[240px] sm:h-[340px]">
           <div className="mb-4 shrink-0">
             <h3 className="font-bold text-[#141B20] text-xs sm:text-sm flex items-center gap-1.5">
-              <CreditCard className="w-4 h-4 text-[#F15A25]" />
+              <CreditCard className="w-4 h-4 text-[#A97E16]" />
               Payment Methods Split
             </h3>
             <p className="text-[10px] sm:text-[11px] text-[#141B20] font-medium">Revenue by collection channel</p>
@@ -415,7 +415,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-center mb-4 sm:mb-6">
           <div>
             <h3 className="font-bold text-[#141B20] text-xs sm:text-sm flex items-center gap-1.5">
-              <Star className="w-4 h-4 text-[#F15A25] fill-amber-500" />
+              <Star className="w-4 h-4 text-[#A97E16] fill-amber-500" />
               Top Selling Culinary Creations
             </h3>
             <p className="text-[10px] sm:text-[11px] text-[#141B20] font-medium">Ranked by volume sold in this period</p>
@@ -452,7 +452,7 @@ export default function Dashboard() {
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
-                        <span className={`inline-block w-2.5 h-2.5 rounded-full border ${dish.is_veg ? 'bg-[white] border-[#F15A25]' : 'bg-[white] border-[#F15A25]'}`} title={dish.is_veg ? 'Vegetarian' : 'Non-Vegetarian'} />
+                        <span className={`inline-block w-2.5 h-2.5 rounded-full border ${dish.is_veg ? 'bg-[white] border-[#A97E16]' : 'bg-[white] border-[#A97E16]'}`} title={dish.is_veg ? 'Vegetarian' : 'Non-Vegetarian'} />
                       </td>
                       <td className="py-3.5 px-4 text-center font-extrabold text-[#141B20]">
                         <div className="flex flex-col items-center">

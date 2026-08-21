@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useSEO } from '../../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import { 
-  MapPin, Phone, Clock, Instagram, ChevronRight, 
+  MapPin, Phone, Clock, ChevronRight, 
   Calendar, HeartHandshake, ShieldCheck, CheckCircle2,
   Utensils, Trophy, Award, Star, Heart, MessageCircle,
   ExternalLink, Sparkles, Send, ChefHat
 } from 'lucide-react';
+import { InstagramIcon } from '../components/SocialIcons';
 import { restaurantData } from '../../config/restaurantData';
 import CateringModal from '../components/CateringModal';
 import Footer from '../components/Footer';
@@ -71,7 +72,7 @@ export default function Landing() {
           {/* Main Headline */}
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-black tracking-tight leading-none drop-shadow-2xl">
-              <span className="text-[#F15A25]">{restaurantData.hero.titleLine1}</span> <br />
+              <span className="text-[#A97E16]">{restaurantData.hero.titleLine1}</span> <br />
               <span className="text-[white] drop-shadow-lg">
                 {restaurantData.hero.titleLine2}
               </span>
@@ -85,31 +86,31 @@ export default function Landing() {
           <div className="pt-4 grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-4 max-w-lg sm:max-w-none mx-auto">
             <Link
               to="/menu?service=FOOD"
-              className="bg-[#F15A25] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#F15A25]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
+              className="bg-[#A97E16] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#A97E16]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
             >
               <span>Food</span>
             </Link>
             <Link
               to="/menu?service=INSTAMART"
-              className="bg-[#F15A25] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#F15A25]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
+              className="bg-[#A97E16] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#A97E16]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
             >
               <span>InstaMart</span>
             </Link>
             <Link
               to="/menu?service=DINE_IN"
-              className="bg-[#F15A25] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#F15A25]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
+              className="bg-[#A97E16] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#A97E16]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
             >
               <span>Dine-in</span>
             </Link>
             <Link
               to="/menu?service=CATERING"
-              className="bg-[#F15A25] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#F15A25]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
+              className="bg-[#A97E16] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#A97E16]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
             >
               <span>Catering</span>
             </Link>
             <Link
               to="/menu?service=MESS_TIFFIN"
-              className="col-span-2 sm:col-span-1 bg-[#F15A25] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#F15A25]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
+              className="col-span-2 sm:col-span-1 bg-[#A97E16] hover:brightness-110 text-white font-black py-3 px-4 rounded-2xl shadow-xl hover:shadow-[#A97E16]/50 transition-all duration-300 flex items-center justify-center text-xs sm:text-sm uppercase tracking-wider cursor-pointer text-center"
             >
               <span>Mess & Tiffin Service</span>
             </Link>
@@ -147,7 +148,7 @@ export default function Landing() {
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
             <div className="space-y-3">
               <div className="inline-flex items-center gap-2 bg-[#141B20]/10 border border-[#141B20]/30 px-3.5 py-1 rounded-full text-xs font-extrabold text-[#141B20] uppercase tracking-wider">
-                <Instagram className="w-4 h-4" />
+                <InstagramIcon className="w-4 h-4" />
                 Live Food Reels & Shorts
               </div>
               <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#141B20]">
@@ -162,7 +163,7 @@ export default function Landing() {
               href={restaurantData.instagramUrl}
               target="_blank"
               rel="noreferrer"
-              className="bg-[#F15A25] hover:brightness-110 text-white font-black py-3.5 px-6 rounded-2xl text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+              className="bg-[#A97E16] hover:brightness-110 text-white font-black py-3.5 px-6 rounded-2xl text-xs uppercase tracking-wider shadow-md transition-all flex items-center gap-2 shrink-0 cursor-pointer"
             >
               <span>Follow {restaurantData.instagramHandle}</span>
               <ExternalLink className="w-4 h-4 text-white" />
@@ -236,11 +237,11 @@ export default function Landing() {
             {restaurantData.cateringPackages.map((pkg) => (
               <div 
                 key={pkg.id} 
-                className="bg-[white] border border-[#F15A25]/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-[#F15A25] hover:border-2 hover:shadow-xl transition-all duration-300 group"
+                className="bg-[white] border border-[#A97E16]/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-[#A97E16] hover:border-2 hover:shadow-xl transition-all duration-300 group"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start">
-                    <span className="bg-[#F15A25] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="bg-[#A97E16] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
                       {pkg.badge}
                     </span>
                     <Utensils className="w-6 h-6 text-[#141B20]" />
@@ -274,7 +275,7 @@ export default function Landing() {
                 <div className="pt-6 space-y-2">
                   <button
                     onClick={() => setIsCateringOpen(true)}
-                    className="w-full bg-[#F15A25] hover:brightness-110 text-white font-black py-3.5 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full bg-[#A97E16] hover:brightness-110 text-white font-black py-3.5 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Calendar className="w-4 h-4 text-white" />
                     <span>Inquire Package</span>
@@ -282,7 +283,7 @@ export default function Landing() {
 
                   <button
                     onClick={() => handleWhatsAppChat(`Hi Order By Bulk! I want to inquire about your "${pkg.title}" package for my upcoming party.`)}
-                    className="w-full bg-[#F15A25]/10 hover:bg-[#F15A25] text-[#141B20] hover:text-white border border-[#F15A25]/40 font-bold py-3 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full bg-[#A97E16]/10 hover:bg-[#A97E16] text-[#141B20] hover:text-white border border-[#A97E16]/40 font-bold py-3 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <WhatsAppIcon className="w-4.5 h-4.5" color="currentColor" />
                     <span>Instant WhatsApp Quote</span>
@@ -323,9 +324,9 @@ export default function Landing() {
               {[...restaurantData.testimonials, ...restaurantData.testimonials].map((review, idx) => (
                 <div
                   key={`${review.id}-${idx}`}
-                  className="w-80 sm:w-96 bg-white border border-[#141B20]/10 shadow-sm rounded-3xl p-6 shrink-0 space-y-4 hover:shadow-lg hover:border-[#F15A25]/50 transition-all duration-300"
+                  className="w-80 sm:w-96 bg-white border border-[#141B20]/10 shadow-sm rounded-3xl p-6 shrink-0 space-y-4 hover:shadow-lg hover:border-[#A97E16]/50 transition-all duration-300"
                 >
-                  <div className="flex text-[#F15A25] gap-1">
+                  <div className="flex text-[#A97E16] gap-1">
                     {[...Array(review.rating)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
@@ -429,7 +430,7 @@ export default function Landing() {
                   href={restaurantData.gmbLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full bg-[#F15A25]/10 hover:bg-[#F15A25] text-[#141B20] hover:text-white font-black py-3.5 px-6 rounded-2xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer border border-[#F15A25]/40"
+                  className="w-full bg-[#A97E16]/10 hover:bg-[#A97E16] text-[#141B20] hover:text-white font-black py-3.5 px-6 rounded-2xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer border border-[#A97E16]/40"
                 >
                   <MapPin className="w-4 h-4" />
                   <span>Google Maps Profile</span>
@@ -438,7 +439,7 @@ export default function Landing() {
 
                 <button
                   onClick={() => handleWhatsAppChat()}
-                  className="w-full bg-[#F15A25] hover:brightness-110 text-white font-black py-3.5 px-6 rounded-2xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg cursor-pointer"
+                  className="w-full bg-[#A97E16] hover:brightness-110 text-white font-black py-3.5 px-6 rounded-2xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg cursor-pointer"
                 >
                   <WhatsAppIcon className="w-4.5 h-4.5" color="currentColor" />
                   <span>Chat on WhatsApp</span>
@@ -541,7 +542,7 @@ function FeaturedProducts() {
         <div key={product.id} className="bg-white rounded-3xl overflow-hidden border border-[#141B20]/10 shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div className="relative h-48 sm:h-56 overflow-hidden">
             <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            <div className="absolute top-4 right-4 bg-[#F15A25] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
+            <div className="absolute top-4 right-4 bg-[#A97E16] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
               {product.tag}
             </div>
           </div>
@@ -551,8 +552,8 @@ function FeaturedProducts() {
               <p className="text-[#141B20] text-xs font-light leading-relaxed line-clamp-2">{product.description}</p>
             </div>
             <div className="flex items-center justify-between pt-4 border-t border-[#141B20]/10">
-              <span className="font-black text-lg text-[#F15A25]">{product.price}</span>
-              <Link to="/menu" className="text-xs font-bold text-[#141B20] hover:text-[#F15A25] transition-colors flex items-center gap-1 uppercase tracking-wider">
+              <span className="font-black text-lg text-[#A97E16]">{product.price}</span>
+              <Link to="/menu" className="text-xs font-bold text-[#141B20] hover:text-[#A97E16] transition-colors flex items-center gap-1 uppercase tracking-wider">
                 Order Now <ChevronRight className="w-4 h-4" />
               </Link>
             </div>

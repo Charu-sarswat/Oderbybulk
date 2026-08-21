@@ -222,7 +222,7 @@ export default function TableManagement() {
       {/* KPI Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Compass className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -232,7 +232,7 @@ export default function TableManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Users className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -244,7 +244,7 @@ export default function TableManagement() {
         </div>
 
         <div className="bg-[white] p-4 sm:p-5 rounded-2xl border border-[#141B20] shadow-xs flex items-center gap-3 sm:gap-4 hover:shadow-sm transition-all">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#F15A25] text-[#F15A25] flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[white] border border-[#A97E16] text-[#A97E16] flex items-center justify-center font-bold shrink-0">
             <Printer className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -384,7 +384,7 @@ export default function TableManagement() {
                 </div>
 
                 {/* Actions */}
-                <div className="w-full flex gap-2 pt-2 border-t border-[#F15A25]">
+                <div className="w-full flex gap-2 pt-2 border-t border-[#A97E16]">
                   <button
                     onClick={() => handlePrintQR(table)}
                     className="flex-1 bg-[#141B20] hover:bg-[#141B20] text-[white] font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition-colors shadow-sm"
@@ -394,7 +394,7 @@ export default function TableManagement() {
                   </button>
                   <button
                     onClick={() => handleDeleteTable(table.id, table.table_number)}
-                    className="p-2 text-[#141B20] hover:text-[#F15A25] hover:bg-[white] rounded-xl transition-colors cursor-pointer"
+                    className="p-2 text-[#141B20] hover:text-[#A97E16] hover:bg-[white] rounded-xl transition-colors cursor-pointer"
                     title="Remove Table"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -448,7 +448,7 @@ export default function TableManagement() {
                         </button>
                         <button
                           onClick={() => handleDeleteTable(table.id, table.table_number)}
-                          className="bg-[white] hover:bg-[white] border border-[#141B20]/60 hover:border-[#F15A25] p-2 rounded-lg text-[#141B20] hover:text-[#F15A25] transition-colors cursor-pointer"
+                          className="bg-[white] hover:bg-[white] border border-[#141B20]/60 hover:border-[#A97E16] p-2 rounded-lg text-[#141B20] hover:text-[#A97E16] transition-colors cursor-pointer"
                           title="Remove Table"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

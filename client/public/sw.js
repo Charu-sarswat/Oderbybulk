@@ -4,8 +4,8 @@ self.addEventListener('push', (event) => {
     title: 'New Order Placed! 🍽️',
     body: 'You have a new order ticket to prepare.',
     url: '/admin/live-orders',
-    icon: '/logo.png',
-    badge: '/logo.png'
+    icon: '/l1.png',
+    badge: '/l1.png'
   };
 
   if (event.data) {
@@ -18,8 +18,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: data.icon || '/logo.png',
-    badge: data.badge || '/logo.png',
+    icon: data.icon || '/l1.png',
+    badge: data.badge || '/l1.png',
     data: {
       url: data.url || '/admin/live-orders'
     },

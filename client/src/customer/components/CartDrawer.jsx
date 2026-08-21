@@ -752,7 +752,7 @@ export default function CartDrawer({
               <button
                 onClick={handleCheckout}
                 disabled={submitting}
-                className="w-full bg-[#F15A25] hover:brightness-110 text-white font-black py-3.5 rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 uppercase tracking-wider text-xs border-0"
+                className="w-full bg-[#A97E16] hover:brightness-110 text-white font-black py-3.5 rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 uppercase tracking-wider text-xs border-0"
               >
                 {submitting ? (
                   <>
