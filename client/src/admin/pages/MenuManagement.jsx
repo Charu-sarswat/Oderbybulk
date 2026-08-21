@@ -65,7 +65,7 @@ export default function MenuManagement() {
   const [itemIsVeg, setItemIsVeg] = useState(true);
   const [itemIsFeatured, setItemIsFeatured] = useState(false);
   const [isUnlimitedStock, setIsUnlimitedStock] = useState(false);
-  const [itemServiceType, setItemServiceType] = useState('FOOD');
+  const [itemServiceTypes, setItemServiceTypes] = useState(['FOOD']);
 
   // Industry-Grade Combo & Multi-Category States
   const [isCombo, setIsCombo] = useState(false);
@@ -268,7 +268,8 @@ export default function MenuManagement() {
       variants: variants,
       addons: addons,
       recipe: recipe,
-      service_type: itemServiceType
+      service_type: itemServiceTypes[0] || 'FOOD',
+      service_types: itemServiceTypes
     };
 
     try {
@@ -326,7 +327,7 @@ export default function MenuManagement() {
     setVariants(item.variants || []);
     setAddons(item.addons || []);
     setRecipe(item.recipe || []);
-    setItemServiceType(item.service_type || 'FOOD');
+    setItemServiceTypes(item.service_types && item.service_types.length > 0 ? item.service_types : (item.service_type ? [item.service_type] : ['FOOD']));
     setShowItemForm(true);
   };
 
@@ -355,7 +356,7 @@ export default function MenuManagement() {
     setRecipe([]);
     setTempRawId('');
     setTempRawQty('');
-    setItemServiceType('FOOD');
+    setItemServiceTypes(['FOOD']);
     setShowItemForm(false);
   };
 
@@ -458,7 +459,9 @@ export default function MenuManagement() {
                        item.category_id === selectedCatFilter ||
                        (item.category_ids && item.category_ids.includes(selectedCatFilter));
                        
-    const matchesService = selectedServiceFilter === 'all' || item.service_type === selectedServiceFilter;
+    const matchesService = selectedServiceFilter === 'all' || 
+                           item.service_type === selectedServiceFilter ||
+                           (item.service_types && item.service_types.includes(selectedServiceFilter));
                        
     return matchesSearch && matchesCat && matchesService;
   });
@@ -897,18 +900,30 @@ export default function MenuManagement() {
                   </div>
                   
                   <div className="col-span-2">
-                    <label className="text-[10px] font-bold text-[#141B20] uppercase block mb-1">Service Type</label>
-                    <select
-                      value={itemServiceType}
-                      onChange={(e) => setItemServiceType(e.target.value)}
-                      className="w-full text-xs p-3 border border-[#141B20] rounded-xl focus:outline-none focus:ring-1 focus:ring-gold-500 bg-white"
-                    >
-                      <option value="FOOD">Food</option>
-                      <option value="INSTAMART">InstaMart</option>
-                      <option value="DINE_IN">Dine-in</option>
-                      <option value="MESS_TIFFIN">Mess & Tiffin Service</option>
-                      <option value="CATERING">Catering</option>
-                    </select>
+                    <label className="text-[10px] font-bold text-[#141B20] uppercase block mb-1">Service Types</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-[white] p-3 rounded-xl border border-[#141B20]">
+                      {[
+                        { id: 'FOOD', label: 'Food' },
+                        { id: 'INSTAMART', label: 'InstaMart' },
+                        { id: 'DINE_IN', label: 'Dine-in' },
+                        { id: 'MESS_TIFFIN', label: 'Mess & Tiffin Service' },
+                        { id: 'CATERING', label: 'Catering' }
+                      ].map(svc => (
+                        <label key={svc.id} className="flex items-center gap-2 text-xs font-semibold text-[#141B20] select-none cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={itemServiceTypes.includes(svc.id)}
+                            onChange={() => {
+                              setItemServiceTypes(prev => 
+                                prev.includes(svc.id) ? prev.filter(id => id !== svc.id) : [...prev, svc.id]
+                              );
+                            }}
+                            className="w-4 h-4 text-gold-500 focus:ring-gold-500 border-[#141B20] rounded"
+                          />
+                          <span>{svc.label}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Combo Meal configuration checklist */}

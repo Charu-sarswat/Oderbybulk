@@ -37,6 +37,10 @@ const menuItemSchema = new mongoose.Schema({
     enum: ['FOOD', 'INSTAMART', 'DINE_IN', 'MESS_TIFFIN', 'CATERING'],
     default: 'FOOD' 
   },
+  service_types: [{
+    type: String,
+    enum: ['FOOD', 'INSTAMART', 'DINE_IN', 'MESS_TIFFIN', 'CATERING']
+  }],
   created_at: { type: Date, default: Date.now }
 });
 

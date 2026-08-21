@@ -82,7 +82,8 @@ router.get('/categories', async (req, res) => {
           combo_items: i.combo_items,
           category_ids: i.category_ids || [],
           recipe: i.recipe || [],
-          service_type: i.service_type || 'FOOD'
+          service_type: i.service_type || 'FOOD',
+          service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD']
         }))
       };
     });
@@ -133,7 +134,8 @@ router.get('/items', async (req, res) => {
       combo_items: i.combo_items,
       category_ids: i.category_ids || [],
       recipe: i.recipe || [],
-      service_type: i.service_type || 'FOOD'
+      service_type: i.service_type || 'FOOD',
+      service_types: i.service_types && i.service_types.length > 0 ? i.service_types : [i.service_type || 'FOOD']
     }));
     res.json(formatted);
   } catch (err) {
@@ -149,7 +151,7 @@ router.post('/items', auth, authorizeRoles('admin', 'staff'), async (req, res) =
     const { 
       category_id, name, description, price, delivery_price,
       image_url, image_urls, is_veg, is_featured, is_available, is_unlimited_stock, stock_quantity, variants, addons,
-      is_combo, combo_items, category_ids, recipe, service_type
+      is_combo, combo_items, category_ids, recipe, service_type, service_types
     } = req.body;
 
     if (!name || price === undefined) {
@@ -175,7 +177,8 @@ router.post('/items', auth, authorizeRoles('admin', 'staff'), async (req, res) =
       combo_items: combo_items || [],
       category_ids: category_ids || [],
       recipe: recipe || [],
-      service_type: service_type || 'FOOD'
+      service_type: (service_types && service_types.length > 0) ? service_types[0] : (service_type || 'FOOD'),
+      service_types: (service_types && service_types.length > 0) ? service_types : [service_type || 'FOOD']
     });
 
     await newItem.save();
