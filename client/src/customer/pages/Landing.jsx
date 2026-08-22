@@ -215,82 +215,59 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* SECTION 4: DEDICATED PARTY & CATERING SECTION */}
-      <section id="catering" className="py-20 px-4 sm:px-6 bg-[white] relative border-t border-[#141B20]">
+      {/* SECTION 4: ABOUT US / OUR STORY */}
+      <section id="about" className="py-20 px-4 sm:px-6 bg-[white] relative border-t border-[#141B20]">
         <div className="max-w-7xl mx-auto space-y-12">
           
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center gap-2 bg-[white]/10 border border-[white]/30 px-4 py-1.5 rounded-full text-xs font-extrabold text-[white] uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" />
-              Live Street Food Counters & Events
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            {/* Image Side */}
+            <div className="relative rounded-3xl overflow-hidden border border-[#A97E16]/30 shadow-xl group aspect-[4/3] sm:aspect-auto sm:h-[450px]">
+              <img 
+                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" 
+                alt="Our Restaurant Story" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="bg-[#A97E16] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                  Authentic Taste
+                </span>
+                <h3 className="text-white text-2xl font-serif font-bold mt-2">Serving Authentic Flavors</h3>
+              </div>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#141B20]">
-              Party & Live Chat Catering
-            </h2>
-            <p className="text-[#141B20] text-xs sm:text-sm max-w-2xl mx-auto font-light">
-              Make your weddings, corporate bashes, birthdays, and anniversaries unforgettable with live Pani Puri, Pav Bhaji tawa, and sweet counters served fresh by expert chefs.
-            </p>
-          </div>
 
-          {/* Catering Packages Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {restaurantData.cateringPackages.map((pkg) => (
-              <div 
-                key={pkg.id} 
-                className="bg-[white] border border-[#A97E16]/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-[#A97E16] hover:border-2 hover:shadow-xl transition-all duration-300 group"
-              >
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
-                    <span className="bg-[#A97E16] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
-                      {pkg.badge}
-                    </span>
-                    <Utensils className="w-6 h-6 text-[#141B20]" />
-                  </div>
-
-                  <div>
-                    <h3 className="font-serif font-black text-xl text-[#141B20] group-hover:text-[#141B20]/70 transition-colors">
-                      {pkg.title}
-                    </h3>
-                    <p className="text-xs text-[#141B20] font-semibold">{pkg.subtitle}</p>
-                  </div>
-
-                  <p className="text-[#141B20] text-xs leading-relaxed font-light">
-                    {pkg.description}
-                  </p>
-
-                  {/* Included Items List */}
-                  <div className="pt-2 space-y-2 border-t border-[#141B20]">
-                    <span className="text-[11px] font-extrabold text-[#141B20] uppercase tracking-wider block">Key Menu Offerings:</span>
-                    <ul className="space-y-1.5 text-xs text-[#141B20] font-light">
-                      {pkg.items.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#141B20] shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+            {/* Text Side */}
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 bg-[#141B20]/10 border border-[#141B20]/30 px-3.5 py-1 rounded-full text-xs font-extrabold text-[#141B20] uppercase tracking-wider">
+                  <ChefHat className="w-4 h-4" />
+                  Our Story
                 </div>
+                <h2 className="text-3xl sm:text-5xl font-serif font-black text-[#141B20]">
+                  A Legacy of Pure Taste
+                </h2>
+              </div>
+              
+              <div className="space-y-4 text-[#141B20] text-sm sm:text-base font-light leading-relaxed">
+                <p>
+                  Welcome to <strong>Order By Bulk</strong>, Hyderabad's favorite destination for authentic Mumbai street food. We started with a simple vision: to bring the vibrant, spicy, and tangy flavors of Mumbai's bustling chowpatis directly to your plate, maintaining the highest standards of hygiene and quality.
+                </p>
+                <p>
+                  Every dish we serve is 100% Pure Veg, prepared fresh daily using secret spice blends passed down through generations. From our crispy Pani Puris to our buttery Pav Bhaji, we ensure an unforgettable culinary experience that transports you straight to the streets of Bombay.
+                </p>
+              </div>
 
-                <div className="pt-6 space-y-2">
-                  <button
-                    onClick={() => setIsCateringOpen(true)}
-                    className="w-full bg-[#A97E16] hover:brightness-110 text-white font-black py-3.5 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <Calendar className="w-4 h-4 text-white" />
-                    <span>Inquire Package</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleWhatsAppChat(`Hi Order By Bulk! I want to inquire about your "${pkg.title}" package for my upcoming party.`)}
-                    className="w-full bg-[#A97E16]/10 hover:bg-[#A97E16] text-[#141B20] hover:text-white border border-[#A97E16]/40 font-bold py-3 px-4 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <WhatsAppIcon className="w-4.5 h-4.5" color="currentColor" />
-                    <span>Instant WhatsApp Quote</span>
-                  </button>
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#141B20]/10">
+                <div>
+                  <h4 className="font-black text-2xl text-[#A97E16]">25+</h4>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#141B20]">Years of Trust</p>
+                </div>
+                <div>
+                  <h4 className="font-black text-2xl text-[#A97E16]">100%</h4>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#141B20]">Pure Vegetarian</p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
 
         </div>
